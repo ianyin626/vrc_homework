@@ -83,9 +83,9 @@ double cap(double input, uint32_t max_value) {
 
 void PID_turn(double target, double error_tolerance, double speed_tolerance) {
     long delay = 10;
-    double kp = 0.3;
-    double ki = 0;
-    double kd = 0;
+    double kp = 2;
+    double ki = 0.4;
+    double kd = 15;
     double porportional_correction = 0;
     double integral_correction = 0;
     double derivative_correction = 0;
@@ -95,7 +95,7 @@ void PID_turn(double target, double error_tolerance, double speed_tolerance) {
     double past_error = target_heading - current_heading;
     double error_sum = 0;
     double total_correction = 0;
-    double integral_range = 30;
+    double integral_range = 10;
 
     while(fabs(current_error) > error_tolerance || (fabs(Inertial.gyroRate(zaxis, dps)) / 100) > speed_tolerance) {
         current_heading = Inertial.rotation(rotationUnits::deg);
@@ -120,9 +120,8 @@ void PID_turn(double target, double error_tolerance, double speed_tolerance) {
         move(total_correction, total_correction * -1);
         past_error = current_error;
         vexDelay(delay);
-        printf("current_error %f, current_heading %f, total_correction %f\n", current_error, current_heading, total_correction);
+        printf("%f %f %f %f\n", current_error, current_heading, total_correction, (Inertial.gyroRate(zaxis, dps)) / 100);
     }
     printf("Final: current_error %f, current_heading %f, total_correction %f\n", current_error, current_heading, total_correction);
-    move(total_correction * -1, total_correction);
-    stop_all_motors();
+    move(0, 0);
 }

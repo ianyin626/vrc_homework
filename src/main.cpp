@@ -24,9 +24,11 @@ int main() {
         vexDelay(10);
     }
     printf("Starting...\n");
-    thread t_split_arcade = thread(split_arcade);
-    // PID_turn(180, 1, 2);
-
+    // thread t_split_arcade = thread(split_arcade);
+    double timer_start = Brain.timer(timeUnits::msec);
+    PID_turn(90, 0.5, 0.015);
+    double timer_stop = Brain.timer(timeUnits::msec);
+    printf("time %f\n", timer_stop - timer_start);
     // while (1) {
     //     Brain.Screen.clearScreen();
     //     Brain.Screen.print(Inertial.rotation(rotationUnits::deg));
