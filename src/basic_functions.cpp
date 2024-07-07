@@ -97,7 +97,7 @@ void PID_turn(double target, double error_tolerance, double speed_tolerance) {
     double total_correction = 0;
     double integral_range = 30;
 
-    while(fabs(current_error) > error_tolerance || fabs(Inertial.gyroRate(zaxis, dps)) > speed_tolerance) {
+    while(fabs(current_error) > error_tolerance || (fabs(Inertial.gyroRate(zaxis, dps)) / 100) > speed_tolerance) {
         current_heading = Inertial.rotation(rotationUnits::deg);
         current_error = target_heading - current_heading;
 
