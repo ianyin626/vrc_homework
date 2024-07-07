@@ -81,8 +81,7 @@ double cap(double input, uint32_t max_value) {
     return input;
 }
 
-void PID_turn(double target, int turn_direction) {
-    int max_error = 1;
+void PID_turn(double target, double error_tolerance, double speed_tolerance) {
     long delay = 10;
     double kp = 0.3;
     double ki = 0;
@@ -98,13 +97,16 @@ void PID_turn(double target, int turn_direction) {
     double total_correction = 0;
     double integral_range = 30;
 
-    while(fabs(current_error) > max_error || fabs(Inertial.gyroRate(zaxis, dps)) > 2) {
+    while(fabs(current_error) > error_tolerance || fabs(Inertial.gyroRate(zaxis, dps)) > speed_tolerance) {
         current_heading = Inertial.rotation(rotationUnits::deg);
         current_error = target_heading - current_heading;
 
         if (fabs(current_error) < integral_range) {
             error_sum = error_sum + current_error;
         } else {
+            error_sum = 0;
+        }
+        if ((current_error * past_error) < 0) {
             error_sum = 0;
         }
         porportional_correction = current_error * kp;
@@ -114,10 +116,6 @@ void PID_turn(double target, int turn_direction) {
         // if (fabs(total_correction) < 1) {
         //     total_correction = total_correction > 0 ? 1 : -1;
         // }
-
-        if ((current_error * past_error) < 0) {
-            error_sum = 0;
-        }
         
         move(total_correction, total_correction * -1);
         past_error = current_error;
