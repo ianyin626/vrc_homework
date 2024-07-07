@@ -82,6 +82,8 @@ double cap(double input, uint32_t max_value) {
 }
 
 void PID_turn(double target, double error_tolerance, double speed_tolerance) {
+    Brain.Screen.print("PID Turn Start\n");
+    double timer_start = Brain.timer(timeUnits::msec);
     long delay = 10;
     double kp = 2;
     double ki = 0.4;
@@ -124,4 +126,12 @@ void PID_turn(double target, double error_tolerance, double speed_tolerance) {
     }
     printf("Final: current_error %f, current_heading %f, total_correction %f\n", current_error, current_heading, total_correction);
     move(0, 0);
+    double timer_end = Brain.timer(timeUnits::msec);
+    printf("Time(ms): %f\n", timer_end - timer_start);
+    Brain.Screen.print("PID Turn End\n");
+}
+
+void initialize() {
+    Inertial.calibrate();
+    vexDelay(5000);
 }
