@@ -96,28 +96,30 @@ void PID_turn(double target, int turn_direction) {
     double past_error = target_heading - current_heading;
     double error_sum = 0;
     double total_correction = 0;
-    double integral_range = 50;
+    double integral_range = 30;
 
     while(fabs(current_error) > max_error || fabs(Inertial.gyroRate(zaxis, dps)) > 2) {
         current_heading = Inertial.rotation(rotationUnits::deg);
         current_error = target_heading - current_heading;
 
-        porportional_correction = current_error * kp;
-            integral_correction = error_sum * ki;
-        derivative_correction = (Inertial.gyroRate(zaxis, dps)) * kd;
-        total_correction = porportional_correction + integral_correction + derivative_correction;
-        if (fabs(total_correction) < 1) {
-            total_correction = total_correction > 0 ? 1 : -1;
+        if (fabs(current_error) < integral_range) {
+            error_sum = error_sum + current_error;
+        } else {
+            error_sum = 0;
         }
+        porportional_correction = current_error * kp;
+        integral_correction = error_sum * ki;
+        derivative_correction = ((Inertial.gyroRate(zaxis, dps)) / 100) * -1 * kd;
+        total_correction = porportional_correction + integral_correction + derivative_correction;
+        // if (fabs(total_correction) < 1) {
+        //     total_correction = total_correction > 0 ? 1 : -1;
+        // }
 
         if ((current_error * past_error) < 0) {
             error_sum = 0;
         }
         
         move(total_correction, total_correction * -1);
-        if (fabs(current_error) < integral_range) {
-            error_sum = error_sum + current_error;
-        }
         past_error = current_error;
         vexDelay(delay);
         printf("current_error %f, current_heading %f, total_correction %f\n", current_error, current_heading, total_correction);
