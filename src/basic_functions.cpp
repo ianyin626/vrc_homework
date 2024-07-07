@@ -18,18 +18,14 @@ extern inertial Inertial;
 double initial_heading = 0;
 
 void move(double left_speed, double right_speed) {
-    leftFront.setVelocity(left_speed, velocityUnits::pct);
-    leftMiddle.setVelocity(left_speed,  velocityUnits::pct);
-    leftBack.setVelocity(left_speed, velocityUnits::pct);
-    rightFront.setVelocity(right_speed, velocityUnits::pct);
-    rightMiddle.setVelocity(right_speed, velocityUnits::pct);
-    rightBack.setVelocity(right_speed, velocityUnits::pct);
-    leftFront.spin(directionType::fwd);
-    leftMiddle.spin(directionType::fwd);
-    leftBack.spin(directionType::fwd);
-    rightFront.spin(directionType::fwd);
-    rightMiddle.spin(directionType::fwd);
-    rightBack.spin(directionType::fwd);
+    left_speed *= 120;
+    right_speed *= 120;
+    leftFront.spin(directionType::fwd, left_speed, voltageUnits::mV);
+    leftMiddle.spin(directionType::fwd, left_speed, voltageUnits::mV);
+    leftBack.spin(directionType::fwd, left_speed, voltageUnits::mV);
+    rightFront.spin(directionType::fwd, right_speed, voltageUnits::mV);
+    rightMiddle.spin(directionType::fwd, right_speed, voltageUnits::mV);
+    rightBack.spin(directionType::fwd, right_speed, voltageUnits::mV);
 }
 
 void stop_all_motors() {
@@ -67,12 +63,11 @@ double convert_inertial_angle(double current, double target, int turn_direction)
     double current_angle = mod(current, 360);
     double diff;
 
-    if (turn_direction = 1)
+    if (turn_direction == 1)
     {
         diff = mod((target_angle - current_angle), 360);
         converted_angle = current + diff;
-    } else if (turn_direction = 0)
-    {
+    } else {
         diff = mod((current_angle - target_angle), 360);
         converted_angle = current - diff;
     }
@@ -101,34 +96,28 @@ void PID_turn(double target, int turn_direction) {
     double past_error = target_heading - current_heading;
     double error_sum = 0;
     double total_correction = 0;
-    double final_left_power = 0;
-    double final_right_power = 0;
+    double integral_range = 50;
 
-    while(fabs(current_error) > max_error || fabs(leftFront.velocity(percentUnits::pct)) > 2) {
+    while(fabs(current_error) > max_error || fabs(Inertial.gyroRate(zaxis, dps)) > 2) {
         current_heading = Inertial.rotation(rotationUnits::deg);
         current_error = target_heading - current_heading;
 
         porportional_correction = current_error * kp;
-        integral_correction = error_sum * ki;
-        derivative_correction = (current_error - past_error) * kd;
+            integral_correction = error_sum * ki;
+        derivative_correction = (Inertial.gyroRate(zaxis, dps)) * kd;
         total_correction = porportional_correction + integral_correction + derivative_correction;
         if (fabs(total_correction) < 1) {
             total_correction = total_correction > 0 ? 1 : -1;
         }
-        // if (current_error >= 0) {
-        //     final_left_power = total_correction;
-        //     final_right_power = total_correction * -1;
-        // } else {
-        //     final_left_power = total_correction * -1;
-        //     final_right_power = total_correction;
-        // }
 
         if ((current_error * past_error) < 0) {
             error_sum = 0;
         }
         
         move(total_correction, total_correction * -1);
-        error_sum = error_sum + current_error;
+        if (fabs(current_error) < integral_range) {
+            error_sum = error_sum + current_error;
+        }
         past_error = current_error;
         vexDelay(delay);
         printf("current_error %f, current_heading %f, total_correction %f\n", current_error, current_heading, total_correction);
