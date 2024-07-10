@@ -34,19 +34,17 @@ void split_arcade() {
     int dead_band = 5;
     int axis3_pos;
     int axis1_pos;
-    while(1) {
-        axis3_pos = get_axis3;
-        axis1_pos = get_axis1;
-        if (abs(axis3_pos) < dead_band) {
-            axis3_pos = 0;
-        }
-        if (abs(axis1_pos) < dead_band) {
-            axis1_pos = 0;
-        }
-        move(axis3_pos + axis1_pos, axis3_pos - axis1_pos);
-        vexDelay(10);
-        // printf("%d %d\n", axis3_pos, axis1_pos);
+    axis3_pos = get_axis3;
+    axis1_pos = get_axis1;
+    if (abs(axis3_pos) < dead_band) {
+        axis3_pos = 0;
     }
+    if (abs(axis1_pos) < dead_band) {
+        axis1_pos = 0;
+    }
+    move(axis3_pos + axis1_pos, axis3_pos - axis1_pos);
+    vexDelay(10);
+    // printf("%d %d\n", axis3_pos, axis1_pos);
 }
 
 double mod(double input, int base) {
@@ -98,7 +96,7 @@ void PID_turn(double target, double error_tolerance, double speed_tolerance) {
     double total_correction = 0;
     double integral_range = 10;
 
-    while(fabs(current_error) > error_tolerance || get_gryoRate > speed_tolerance) {
+    while(fabs(current_error) > error_tolerance || fabs(get_gyroRate) > speed_tolerance) {
         current_heading = get_inertial;
         current_error = target_heading - current_heading;
 
@@ -112,13 +110,13 @@ void PID_turn(double target, double error_tolerance, double speed_tolerance) {
         }
         porportional_correction = current_error * kp;
         integral_correction = error_sum * ki;
-        derivative_correction = get_gryoRate * -1 * kd;
+        derivative_correction = get_gyroRate * -1 * kd;
         total_correction = porportional_correction + integral_correction + derivative_correction;
         
         move(total_correction, total_correction * -1);
         past_error = current_error;
         vexDelay(delay);
-        printf("%f %f %f %f\n", current_error, current_heading, total_correction, get_gryoRate);
+        printf("%f %f %f %f\n", current_error, current_heading, total_correction, get_gyroRate);
     }
     printf("Final: current_error %f, current_heading %f, total_correction %f\n", 
     current_error, current_heading, total_correction);
@@ -132,21 +130,23 @@ void PID_forward(double target, double error_tolerance, double speed_tolerance) 
     Brain.Screen.print("PID_forward starting/n");
     double timer_start = get_timer;
     long delay = 10;
-    double kp = 2;
-    double ki = 0.6;
-    double kd = 15;
+    double kp = 3.2;
+    double ki = 0.1;
+    double kd = 18;
     double porportional_correction = 0;
     double integral_correction = 0;
     double derivative_correction = 0;
+    leftFront.resetPosition();
+    leftMiddle.resetPosition();
     double current_position = get_position;
     double target_distance = target;
     double current_error = target_distance - current_position;
     double past_error = current_error;
     double error_sum = 0;
     double total_correction = 0;
-    double integral_range = 20;
+    double integral_range = 5;
 
-    while (fabs(current_error) > error_tolerance || get_motorRate > speed_tolerance) {
+    while (fabs(current_error) > error_tolerance || fabs(get_motorRate) > speed_tolerance) {
         current_position = get_position;
         current_error = target_distance - current_position;
 
@@ -165,20 +165,62 @@ void PID_forward(double target, double error_tolerance, double speed_tolerance) 
 
         move(total_correction, total_correction);
         past_error = current_error;
-        printf("%f %f %f\n", porportional_correction, integral_correction, derivative_correction);
+        // printf("%f %f %f %f\n", porportional_correction, integral_correction, derivative_correction, get_motorRate);
+        std::cout << porportional_correction  <<  ", " <<  integral_correction  <<  ", " << derivative_correction <<  ", " << get_motorRate <<  std::endl;
         vexDelay(delay);
     }
     move(0, 0);
+    printf("PID forward\n");
 }   
 
+void PID_drift(double target_angle, double base_speed, double max_speed, double error_tolerance, double speed_tolerance) {
+    long delay = 10;
+    double kp = 1.4;
+    double ki = 0.1;
+    double kd = 25;
+    double porportional_correction = 0;
+    double integral_correction = 0;
+    double derivative_correction = 0;
+    double current_heading = get_inertial;
+    double target_heading = target_angle;
+    double current_error = target_heading - current_heading;
+    double past_error = current_error;
+    double error_sum = 0;
+    double total_correction = 0;
+    double integral_range = 10;
+    while (fabs(current_error) > error_tolerance || fabs(get_gyroRate) > speed_tolerance) {
+        current_heading = get_inertial;
+        current_error = target_heading - current_heading;
+
+        if (fabs(current_error) < integral_range) {
+            error_sum = error_sum + current_error;
+        } else {
+            error_sum = 0;
+        }
+        if ((current_error * past_error) < 0) {
+            error_sum = 0;
+        }
+        porportional_correction = current_error * kp;
+        integral_correction = error_sum * ki;
+        derivative_correction = get_gyroRate * -1 * kd;
+        total_correction = cap((porportional_correction + integral_correction + derivative_correction), max_speed);
+        
+        move(base_speed + total_correction, base_speed - total_correction);
+        past_error = current_error;
+        vexDelay(delay);
+        printf("%f %f\n", get_gyroRate, current_error);
+    }
+    move(0, 0);
+}
+
 void intake_forward() {
-    rightIntake.spin(directionType::fwd, 100, percentUnits::pct);
-    leftIntake.spin(directionType::fwd, 100, percentUnits::pct);
+    rightIntake.spin(directionType::fwd, 120, voltageUnits::mV);
+    leftIntake.spin(directionType::fwd, 120, voltageUnits::mV);
 }
 
 void intake_backward() {
-    rightIntake.spin(directionType::rev, 100, percentUnits::pct);
-    leftIntake.spin(directionType::rev, 100, percentUnits::pct);
+    rightIntake.spin(directionType::rev, 120, voltageUnits::mV);
+    leftIntake.spin(directionType::rev, 120, voltageUnits::mV);
 }
 
 bool intake_is_spinning = false;
@@ -217,10 +259,14 @@ void initialize() {
 }
 
 void initialize_macros() {
-    Controller.ButtonL1.pressed(intake_forward);
-    Controller.ButtonL1.released(intake_stop);
-    Controller.ButtonL2.pressed(intake_backward);
-    Controller.ButtonL2.released(intake_stop);
-    Controller.ButtonR1.pressed(intake_toggle_forward);
-    Controller.ButtonR2.pressed(intake_toggle_backward);
+    if (Controller.ButtonL1.PRESSED) {
+        intake_forward(); // Note: untested
+    } else if (Controller.ButtonL2.RELEASED) {
+        intake_stop(); // Note: untested
+    }
+    if (Controller.ButtonR1.PRESSED) {
+        intake_toggle_forward(); // Note:untested
+    } else if (Controller.ButtonR2.PRESSED) {
+        intake_toggle_forward(); // Note:untested
+    }
 }

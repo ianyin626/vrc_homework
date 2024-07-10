@@ -19,28 +19,19 @@ void pre_auton(void)
 
 }
 
-void autonomous(void)
-{
+void autonomous(void) {
     initialize();
     // PID_turn(90, 0.5, 0.015);
-    PID_forward(200, 0.1, 0.01);
+    // PID_forward(100, 0.1, 0.01);
+    PID_drift(90, 50, 50, 1, 0.3);
 }
 
 void usercontrol(void) {
-    // if (Controller.ButtonL1.pressed()) {
-    //     vex::task(intake_forward);
-    // }
-    // if (Controller.ButtonL2.pressed()) {
-    //     vex::task(intake_backward);
-    // }
-    // if (Controller.ButtonR1.pressed()) {
-    //     vex::task(intake_toggle_forward);
-    // }
-    // if (Controller.ButtonR1.pressed()) {
-    //     vex::task(intake_toggle_forward);
-    // }
+    initialize_macros();
+    while (1) {
     initialize_macros();
     split_arcade();
+    }
 }
 
 int main()
