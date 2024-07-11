@@ -12,7 +12,7 @@ using namespace vex;
 
 brain Brain = brain();
 controller Controller = controller();
-motor leftFront = motor(19, ratio6_1, true);
+motor leftFront = motor(PORT20, ratio6_1, true);
 motor leftMiddle = motor(17, ratio6_1, true);
 motor leftBack = motor(9, ratio6_1, true);
 motor rightFront = motor(10, ratio6_1, false);
