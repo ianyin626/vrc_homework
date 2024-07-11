@@ -43,7 +43,6 @@ void split_arcade() {
         axis1_pos = 0;
     }
     move(axis3_pos + axis1_pos, axis3_pos - axis1_pos);
-    vexDelay(10);
     // printf("%d %d\n", axis3_pos, axis1_pos);
 }
 
@@ -214,13 +213,13 @@ void PID_drift(double target_angle, double base_speed, double max_speed, double 
 }
 
 void intake_forward() {
-    rightIntake.spin(directionType::fwd, 120, voltageUnits::mV);
-    leftIntake.spin(directionType::fwd, 120, voltageUnits::mV);
+    rightIntake.spin(directionType::fwd, 12700, voltageUnits::mV);
+    leftIntake.spin(directionType::fwd, 12700, voltageUnits::mV);
 }
 
 void intake_backward() {
-    rightIntake.spin(directionType::rev, 120, voltageUnits::mV);
-    leftIntake.spin(directionType::rev, 120, voltageUnits::mV);
+    rightIntake.spin(directionType::rev, 12700, voltageUnits::mV);
+    leftIntake.spin(directionType::rev, 12700, voltageUnits::mV);
 }
 
 bool intake_is_spinning = false;
@@ -258,15 +257,21 @@ void initialize() {
     double timer_end = get_timer;
 }
 
+void macro_actions() {
+    while (1) {
+        if (Controller.ButtonL1.PRESSED) {
+            intake_forward(); // Note: untested
+        } else {
+            intake_stop(); // Note: untested
+        }
+        if (Controller.ButtonR1.PRESSED) {
+            intake_toggle_forward(); // Note:untested
+        } else if (Controller.ButtonR2.PRESSED) {
+            intake_toggle_forward(); // Note:untested
+        }
+        vexDelay(10);
+    }
+}
 void initialize_macros() {
-    if (Controller.ButtonL1.PRESSED) {
-        intake_forward(); // Note: untested
-    } else if (Controller.ButtonL2.RELEASED) {
-        intake_stop(); // Note: untested
-    }
-    if (Controller.ButtonR1.PRESSED) {
-        intake_toggle_forward(); // Note:untested
-    } else if (Controller.ButtonR2.PRESSED) {
-        intake_toggle_forward(); // Note:untested
-    }
+    vex::thread task(macro_actions);
 }

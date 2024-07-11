@@ -18,8 +18,8 @@ motor leftBack = motor(9, ratio6_1, true);
 motor rightFront = motor(10, ratio6_1, false);
 motor rightMiddle = motor(0, ratio6_1, false);
 motor rightBack = motor(11, ratio6_1, false);
-motor rightIntake = motor(16, ratio6_1, false);
-motor leftIntake = motor(6, ratio6_1, true);
+motor rightIntake = motor(15, ratio6_1, false);
+motor leftIntake = motor(5, ratio6_1, true);
 inertial Inertial = inertial(2);
 
 #define wheel_circumference_cm 31.9185

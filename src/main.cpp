@@ -29,8 +29,8 @@ void autonomous(void) {
 void usercontrol(void) {
     initialize_macros();
     while (1) {
-    initialize_macros();
-    split_arcade();
+        split_arcade();
+        vexDelay(10);
     }
 }
 
