@@ -13,14 +13,14 @@ using namespace vex;
 brain Brain = brain();
 controller Controller = controller();
 motor leftFront = motor(PORT20, ratio6_1, true);
-motor leftMiddle = motor(17, ratio6_1, true);
-motor leftBack = motor(9, ratio6_1, true);
-motor rightFront = motor(10, ratio6_1, false);
-motor rightMiddle = motor(0, ratio6_1, false);
-motor rightBack = motor(11, ratio6_1, false);
-motor rightIntake = motor(15, ratio6_1, false);
-motor leftIntake = motor(5, ratio6_1, true);
-inertial Inertial = inertial(2);
+motor leftMiddle = motor(PORT18, ratio6_1, true);
+motor leftBack = motor(PORT10, ratio6_1, true);
+motor rightFront = motor(PORT11, ratio6_1, false);
+motor rightMiddle = motor(PORT1, ratio6_1, false);
+motor rightBack = motor(PORT12, ratio6_1, false);
+motor rightIntake = motor(PORT16, ratio6_1, false);
+motor leftIntake = motor(PORT6, ratio6_1, true);
+inertial Inertial = inertial(PORT3);
 
 #define wheel_circumference_cm 31.9185
 #define motor_to_wheel_gear_ratio 0.75

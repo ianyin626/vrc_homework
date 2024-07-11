@@ -259,15 +259,21 @@ void initialize() {
 
 void macro_actions() {
     while (1) {
-        if (Controller.ButtonL1.PRESSED) {
-            intake_forward(); // Note: untested
-        } else {
-            intake_stop(); // Note: untested
-        }
+        // if (Controller.ButtonL1.PRESSED) {
+        //     std::cout << "Controller.ButtonL1.PRESSED" << std::endl;
+        //     intake_forward(); // Note: untested
+        // } else {
+        //     std::cout << "Controller.ButtonL1.RELEASED" << std::endl;
+        //     intake_stop(); // Note: untested
+        // }
+        Controller.ButtonL1.pressed(intake_forward);
+        Controller.ButtonL1.released(intake_stop);
+        Controller.ButtonL2.pressed(intake_backward);
+        Controller.ButtonL2.released(intake_stop);
         if (Controller.ButtonR1.PRESSED) {
             intake_toggle_forward(); // Note:untested
         } else if (Controller.ButtonR2.PRESSED) {
-            intake_toggle_forward(); // Note:untested
+            intake_toggle_backward(); // Note:untested
         }
         vexDelay(10);
     }
