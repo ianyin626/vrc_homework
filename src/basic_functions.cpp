@@ -82,7 +82,7 @@ void PID_turn(double target, double error_tolerance, double speed_tolerance) {
     double timer_start = get_timer;
     long delay = 10;
     double kp = 2;
-    double ki = 0.4;
+    double ki = 0.2;
     double kd = 15;
     double porportional_correction = 0;
     double integral_correction = 0;
@@ -127,11 +127,10 @@ void PID_turn(double target, double error_tolerance, double speed_tolerance) {
 
 void PID_forward(double target, double error_tolerance, double speed_tolerance) {
     Brain.Screen.print("PID_forward starting/n");
-    double timer_start = get_timer;
     long delay = 10;
     double kp = 3.2;
     double ki = 0.1;
-    double kd = 18;
+    double kd = 25;
     double porportional_correction = 0;
     double integral_correction = 0;
     double derivative_correction = 0;
@@ -144,8 +143,9 @@ void PID_forward(double target, double error_tolerance, double speed_tolerance) 
     double error_sum = 0;
     double total_correction = 0;
     double integral_range = 5;
+    double motorRate = get_motorRate;
 
-    while (fabs(current_error) > error_tolerance || fabs(get_motorRate) > speed_tolerance) {
+    while (fabs(current_error) > error_tolerance || fabs(motorRate) > speed_tolerance) {
         current_position = get_position;
         current_error = target_distance - current_position;
 
@@ -159,14 +159,15 @@ void PID_forward(double target, double error_tolerance, double speed_tolerance) 
         }
         porportional_correction = current_error * kp;
         integral_correction = error_sum * ki;
-        derivative_correction = get_motorRate * -1 * kd;
+        derivative_correction = motorRate * -1 * kd;
         total_correction = porportional_correction + integral_correction + derivative_correction;
 
         move(total_correction, total_correction);
         past_error = current_error;
-        // printf("%f %f %f %f\n", porportional_correction, integral_correction, derivative_correction, get_motorRate);
-        std::cout << porportional_correction  <<  ", " <<  integral_correction  <<  ", " << derivative_correction <<  ", " << get_motorRate <<  std::endl;
+        printf("%f %f %f %f\n", current_error, error_sum, motorRate, total_correction);
+        // std::cout << porportional_correction  <<  ", " <<  integral_correction  <<  ", " << derivative_correction <<  ", " << get_motorRate <<  std::endl;
         vexDelay(delay);
+        motorRate = get_motorRate;
     }
     move(0, 0);
     printf("PID forward\n");
@@ -175,8 +176,8 @@ void PID_forward(double target, double error_tolerance, double speed_tolerance) 
 void PID_drift(double target_angle, double base_speed, double max_speed, double error_tolerance, double speed_tolerance) {
     long delay = 10;
     double kp = 1.4;
-    double ki = 0.1;
-    double kd = 25;
+    double ki = 0.05;
+    double kd = 23;
     double porportional_correction = 0;
     double integral_correction = 0;
     double derivative_correction = 0;
@@ -186,8 +187,9 @@ void PID_drift(double target_angle, double base_speed, double max_speed, double 
     double past_error = current_error;
     double error_sum = 0;
     double total_correction = 0;
-    double integral_range = 10;
-    while (fabs(current_error) > error_tolerance || fabs(get_gyroRate) > speed_tolerance) {
+    double integral_range = 3;
+    double gyroRate = get_gyroRate;
+    while (fabs(current_error) > error_tolerance || fabs(gyroRate) > speed_tolerance) {
         current_heading = get_inertial;
         current_error = target_heading - current_heading;
 
@@ -201,15 +203,19 @@ void PID_drift(double target_angle, double base_speed, double max_speed, double 
         }
         porportional_correction = current_error * kp;
         integral_correction = error_sum * ki;
-        derivative_correction = get_gyroRate * -1 * kd;
+        derivative_correction = gyroRate * -1 * kd;
         total_correction = cap((porportional_correction + integral_correction + derivative_correction), max_speed);
         
         move(base_speed + total_correction, base_speed - total_correction);
         past_error = current_error;
+        printf("%f %f %f\n", gyroRate, current_error, total_correction);
         vexDelay(delay);
-        printf("%f %f\n", get_gyroRate, current_error);
+        gyroRate = get_gyroRate;
     }
+    move(-100, -100);
+    vexDelay(50);
     move(0, 0);
+    printf("Exit\n");
 }
 
 void intake_forward() {
@@ -254,7 +260,6 @@ void intake_stop() {
 void initialize() {
     Inertial.calibrate();
     vexDelay(5000);
-    double timer_end = get_timer;
 }
 
 void macro_actions() {

@@ -21,9 +21,9 @@ void pre_auton(void)
 
 void autonomous(void) {
     initialize();
-    // PID_turn(90, 0.5, 0.015);
-    // PID_forward(100, 0.1, 0.01);
-    PID_drift(90, 50, 50, 1, 0.3);
+    PID_turn(90, 0.5, 0.015);
+    // PID_forward(100, 0.5, 0.05);
+    // PID_drift(90, 50, 50, 1, 0.1);
 }
 
 void usercontrol(void) {
