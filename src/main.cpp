@@ -7,24 +7,25 @@
 /*                                                                            */
 /*----------------------------------------------------------------------------*/
 
-#include "vex.h"
+#include "devices.h"
 #include "basic_functions.h"
 #include "tasks.h"
 
 using namespace vex;
-int route = 0;
-extern brain Brain;
-extern controller Controller;
+
 competition Competition;
+
+int route = 0;
+
 
 void pre_auton(void) {
 
 }
 
 void auton_route_1() {
-    task(position_check);
-    task(PID_forward_intake);
-    task(PID_forward_100);
+    task taskCheck(position_check);
+    task taskIntake(PID_forward_intake);
+    task taskForward(PID_forward_100);
 }
 
 void autonomous(void) {
@@ -74,7 +75,7 @@ void usercontrol(void) {
         if (Controller.ButtonY.PRESSED) {
             route = (route + 1) % 7;
             Controller.Screen.clearLine(4);
-                Controller.Screen.setCursor(4, 1);
+            Controller.Screen.setCursor(4, 1);
             switch (route) {
             case 0:
                 Controller.Screen.print("route 1");

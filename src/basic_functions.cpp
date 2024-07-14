@@ -1,23 +1,8 @@
 #include "devices.h"
-#include "v5.h"
-#include "v5_vcs.h"
-#include <math.h>
+
+#include <cstdio>
+#include <cstdlib>
 #include <iostream>
-
-using namespace vex;
-extern brain Brain;
-extern controller Controller;
-extern motor leftFront;
-extern motor leftMiddle;
-extern motor leftBack;
-extern motor rightFront;
-extern motor rightMiddle;
-extern motor rightBack;
-extern motor leftIntake;
-extern motor rightIntake;
-extern inertial Inertial;
-
-double initial_heading = 0;
 
 void move(double left_speed, double right_speed) {
     left_speed *= 120;
@@ -31,15 +16,13 @@ void move(double left_speed, double right_speed) {
 }
 
 void split_arcade() {
-    int dead_band = 5;
-    int axis3_pos;
-    int axis1_pos;
-    axis3_pos = get_axis3;
-    axis1_pos = get_axis1;
-    if (abs(axis3_pos) < dead_band) {
+    int32_t dead_band = 5;
+    int32_t axis3_pos = getAxis3();
+    int32_t axis1_pos = getAxis1();
+    if (std::abs(axis3_pos) < dead_band) {
         axis3_pos = 0;
     }
-    if (abs(axis1_pos) < dead_band) {
+    if (std::abs(axis1_pos) < dead_band) {
         axis1_pos = 0;
     }
     move(axis3_pos + axis1_pos, axis3_pos - axis1_pos);
@@ -79,7 +62,7 @@ double cap(double input, uint32_t max_value) {
 
 void PID_turn(double target, double error_tolerance, double speed_tolerance) {
     Brain.Screen.print("PID Turn Start\n");
-    double timer_start = get_timer;
+    double timer_start = getTimer();
     long delay = 10;
     double kp = 2;
     double ki = 0.2;
@@ -87,7 +70,7 @@ void PID_turn(double target, double error_tolerance, double speed_tolerance) {
     double porportional_correction = 0;
     double integral_correction = 0;
     double derivative_correction = 0;
-    double current_heading = get_inertial;
+    double current_heading = getInertial();
     double target_heading = target;
     double current_error = target_heading - current_heading;
     double past_error = current_error;
@@ -95,8 +78,8 @@ void PID_turn(double target, double error_tolerance, double speed_tolerance) {
     double total_correction = 0;
     double integral_range = 10;
 
-    while(fabs(current_error) > error_tolerance || fabs(get_gyroRate) > speed_tolerance) {
-        current_heading = get_inertial;
+    while(fabs(current_error) > error_tolerance || fabs(getGyroRate()) > speed_tolerance) {
+        current_heading = getInertial();
         current_error = target_heading - current_heading;
 
         if (fabs(current_error) < integral_range) {
@@ -109,18 +92,18 @@ void PID_turn(double target, double error_tolerance, double speed_tolerance) {
         }
         porportional_correction = current_error * kp;
         integral_correction = error_sum * ki;
-        derivative_correction = get_gyroRate * -1 * kd;
+        derivative_correction = getGyroRate() * -1 * kd;
         total_correction = porportional_correction + integral_correction + derivative_correction;
         
         move(total_correction, total_correction * -1);
         past_error = current_error;
         vexDelay(delay);
-        printf("%f %f %f %f\n", current_error, current_heading, total_correction, get_gyroRate);
+        printf("%f %f %f %f\n", current_error, current_heading, total_correction, getGyroRate());
     }
     printf("Final: current_error %f, current_heading %f, total_correction %f\n", 
     current_error, current_heading, total_correction);
     move(0, 0);
-    double timer_end = get_timer;
+    double timer_end = getTimer();
     printf("Time(ms): %f\n", timer_end - timer_start);
     Brain.Screen.print("PID Turn End\n");
 }
@@ -134,17 +117,17 @@ void PID_forward(double target, double error_tolerance, double speed_tolerance) 
     double porportional_correction = 0;
     double integral_correction = 0;
     double derivative_correction = 0;
-    double current_position = get_position;
+    double current_position = getPosition();
     double target_distance = target;
     double current_error = target_distance - current_position;
     double past_error = current_error;
     double error_sum = 0;
     double total_correction = 0;
     double integral_range = 5;
-    double motorRate = get_motorRate;
+    double motorRate = getMotorRate();
 
     while (fabs(current_error) > error_tolerance || fabs(motorRate) > speed_tolerance) {
-        current_position = get_position;
+        current_position = getPosition();
         current_error = target_distance - current_position;
 
         if (fabs(current_error) < integral_range) {
@@ -163,9 +146,9 @@ void PID_forward(double target, double error_tolerance, double speed_tolerance) 
         move(total_correction, total_correction);
         past_error = current_error;
         printf("%f %f %f %f\n", current_error, error_sum, motorRate, total_correction);
-        // std::cout << porportional_correction  <<  ", " <<  integral_correction  <<  ", " << derivative_correction <<  ", " << get_motorRate <<  std::endl;
+        // std::cout << porportional_correction  <<  ", " <<  integral_correction  <<  ", " << derivative_correction <<  ", " << getMotorRate() <<  std::endl;
         vexDelay(delay);
-        motorRate = get_motorRate;
+        motorRate = getMotorRate();
     }
     move(0, 0);
     printf("PID forward\n");
@@ -179,16 +162,16 @@ void PID_drift(double target_angle, double base_speed, double max_speed, double 
     double porportional_correction = 0;
     double integral_correction = 0;
     double derivative_correction = 0;
-    double current_heading = get_inertial;
+    double current_heading = getInertial();
     double target_heading = target_angle;
     double current_error = target_heading - current_heading;
     double past_error = current_error;
     double error_sum = 0;
     double total_correction = 0;
     double integral_range = 3;
-    double gyroRate = get_gyroRate;
+    double gyroRate = getGyroRate();
     while (fabs(current_error) > error_tolerance || fabs(gyroRate) > speed_tolerance) {
-        current_heading = get_inertial;
+        current_heading = getInertial();
         current_error = target_heading - current_heading;
 
         if (fabs(current_error) < integral_range) {
@@ -208,7 +191,7 @@ void PID_drift(double target_angle, double base_speed, double max_speed, double 
         past_error = current_error;
         printf("%f %f %f\n", gyroRate, current_error, total_correction);
         vexDelay(delay);
-        gyroRate = get_gyroRate;
+        gyroRate = getGyroRate();
     }
     move(-100, -100);
     vexDelay(50);
