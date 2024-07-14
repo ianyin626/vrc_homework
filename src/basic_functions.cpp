@@ -134,8 +134,6 @@ void PID_forward(double target, double error_tolerance, double speed_tolerance) 
     double porportional_correction = 0;
     double integral_correction = 0;
     double derivative_correction = 0;
-    leftFront.resetPosition();
-    leftMiddle.resetPosition();
     double current_position = get_position;
     double target_distance = target;
     double current_error = target_distance - current_position;
@@ -260,6 +258,9 @@ void intake_stop() {
 void initialize() {
     Inertial.calibrate();
     vexDelay(5000);
+
+    leftFront.resetPosition();
+    leftMiddle.resetPosition();
 }
 
 void macro_actions() {
