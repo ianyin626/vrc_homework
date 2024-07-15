@@ -22,7 +22,7 @@ motor rightIntake = motor(PORT16, ratio6_1, false);
 motor leftIntake = motor(PORT6, ratio6_1, true);
 inertial Inertial = inertial(PORT3);
 
-#define wheel_circumference_cm 31.9185
+#define wheel_circumference_cm 25.93382
 #define motor_to_wheel_gear_ratio 0.75
 #define get_inertial Inertial.rotation(rotationUnits::deg)
 #define get_gyroRate fabs(Inertial.gyroRate(zaxis, dps)) / 100
