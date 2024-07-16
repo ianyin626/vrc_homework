@@ -198,21 +198,21 @@ void PID_drift(double target_angle, double base_speed, double max_speed, double 
     logMessage("Exit");
 }
 
-void intake_forward() {
-    rightIntake.spin(directionType::fwd, 12700, voltageUnits::mV);
-    leftIntake.spin(directionType::fwd, 12700, voltageUnits::mV);
+void intake(double volt) {
+    rightIntake.spin(directionType::fwd, volt * 120, voltageUnits::mV);
+    leftIntake.spin(directionType::fwd, volt * 120, voltageUnits::mV);
 }
 
 void intake_backward() {
-    rightIntake.spin(directionType::rev, 12700, voltageUnits::mV);
-    leftIntake.spin(directionType::rev, 12700, voltageUnits::mV);
+    rightIntake.spin(directionType::rev, 12000, voltageUnits::mV);
+    leftIntake.spin(directionType::rev, 12000, voltageUnits::mV);
 }
 
 bool intake_is_spinning = false;
 
 void intake_toggle_forward() {
     if (intake_is_spinning == false) {
-        intake_forward();
+        intake(100);
         intake_is_spinning = true;
     } else {
         rightIntake.stop();
@@ -246,11 +246,21 @@ void initialize() {
 }
 
 void macro_actions() {
-    Controller.ButtonL1.pressed(intake_forward);
-    Controller.ButtonL1.released(intake_stop);
-    Controller.ButtonL2.pressed(intake_backward);
-    Controller.ButtonL2.released(intake_stop);
     while (1) {
+        // if (Controller.ButtonL1.PRESSED) {
+        //     std::cout << "Controller.ButtonL1.PRESSED" << std::endl;
+        //     intake_forward(); // Note: untested
+        // } else {
+        //     std::cout << "Controller.ButtonL1.RELEASED" << std::endl;
+        //     intake_stop(); // Note: untested
+        // }
+        if (Controller.ButtonL1.pressing()) {
+            intake(100);
+        } else if (Controller.ButtonL2.pressing()) {
+            intake(-100);
+        } else {
+            intake(0);
+        }
         if (Controller.ButtonR1.PRESSED) {
             intake_toggle_forward();
         } else if (Controller.ButtonR2.PRESSED) {
