@@ -1,5 +1,5 @@
-#ifndef _basic_functions_h;
-#define _basic_functions_h;
+#ifndef BASIC_FUNCTIONS_H;
+#define BASIC_FUNCTIONS_H;
 
 void move(double left_speed, double right_speed);
 void split_arcade();

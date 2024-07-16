@@ -1,8 +1,6 @@
-#ifndef _tasks_h
-#define _tasks_h
+#ifndef TASKS_H
+#define TASKS_H
 
-// #include "devices.h"
-// using namespace vex;
 
 int PID_forward_intake();
 int position_check();
