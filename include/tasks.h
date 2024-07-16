@@ -1,9 +1,11 @@
 #ifndef TASKS_H
 #define TASKS_H
-
+extern bool intake_positionCheck;
+extern int reverseTarget;
+extern bool puncher_move;
+extern double target;
 
 int PID_forward_intake();
-int position_check();
-int PID_forward_100();
+int puncher_control();
 
 #endif

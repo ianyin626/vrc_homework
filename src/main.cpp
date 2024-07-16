@@ -14,7 +14,6 @@
 using namespace vex;
 
 competition Competition;
-
 int route = 0;
 
 
@@ -23,9 +22,10 @@ void pre_auton(void) {
 }
 
 void auton_route_1() {
-    task taskCheck(position_check);
+    reverseTarget = 75;
+    intake_positionCheck = true;
     task taskIntake(PID_forward_intake);
-    task taskForward(PID_forward_100);
+    PID_forward(150, 0.5, 0.05);
 }
 
 void auton_route_2() {
@@ -34,9 +34,15 @@ void auton_route_2() {
     PID_drift(270, 50, 50, 1, 0.1);
 }
 
+void auton_route_3() {
+    target = 360;
+    puncher_move = true;
+    task taskPuncher(puncher_control);
+}
+
 void autonomous(void) {
     initialize();
-    auton_route_2();
+    auton_route_3();
     double timer_start = Brain.timer(msec);
     switch (route) {
     case 0:
@@ -80,7 +86,7 @@ void usercontrol(void) {
     while (1) {
         split_arcade();
         if (Controller.ButtonY.PRESSED) {
-            route = (route + 1) % 7;
+            route = (route + 1) % 8;
             Controller.Screen.clearLine(4);
             Controller.Screen.setCursor(4, 1);
             switch (route) {
