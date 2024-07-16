@@ -10,6 +10,7 @@
 #include "devices.h"
 #include "basic_functions.h"
 #include "tasks.h"
+#include "utilities.h"
 
 using namespace vex;
 
@@ -65,7 +66,7 @@ void autonomous(void) {
         break;
     }
     double timer_end = Brain.timer(msec);
-    printf("%f\n", timer_end - timer_start);
+    logMessage("%.2f\n", timer_end - timer_start);
     while (1) {
         vexDelay(10);
     }

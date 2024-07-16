@@ -18,6 +18,7 @@ extern motor rightIntake;
 extern motor leftIntake;
 extern inertial Inertial;
 
+#define DEBUG_MODE 1
 #define WHEEL_CIRCUMFERENCE_CM 31.9185
 #define MOTOR_TO_WHEEL_GEAR_RATIO 0.75
 #define INITIAL_HEADING 0
