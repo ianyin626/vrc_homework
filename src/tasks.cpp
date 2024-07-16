@@ -1,5 +1,6 @@
 #include "devices.h"
 #include "basic_functions.h"
+#include "utilities.h"
 
 
 extern motor puncher;
@@ -30,7 +31,8 @@ int puncher_control() {
     double kp = 1;
     while (1) {
         if (puncher_move) {
-            puncher.spin(fwd, (target - puncher.position(rotationUnits::deg)) * kp, voltageUnits::mV);
+            puncher.spin(fwd, (target - puncher.position(rotationUnits::deg)) * kp * 120, voltageUnits::mV);
+            logMessage("%.2f", target - puncher.position(rotationUnits::deg));
         }
         vexDelay(10);
     }

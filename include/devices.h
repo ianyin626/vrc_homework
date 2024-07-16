@@ -16,6 +16,7 @@ extern motor rightMiddle;
 extern motor rightBack;
 extern motor rightIntake;
 extern motor leftIntake;
+extern motor puncher;
 extern inertial Inertial;
 
 #define DEBUG_MODE 1

@@ -36,7 +36,7 @@ void auton_route_2() {
 }
 
 void auton_route_3() {
-    target = 360;
+    target = 2100;   // ready: 1440 deg       launch: 2100
     puncher_move = true;
     task taskPuncher(puncher_control);
 }
@@ -84,6 +84,11 @@ void autonomous(void) {
 
 void usercontrol(void) {
     initialize_macros();
+    puncher_move = true;
+    target = 1440;
+    task preset_puncher(puncher_control);
+    logMessage("done presetting");
+    
     while (1) {
         split_arcade();
         if (Controller.ButtonY.PRESSED) {

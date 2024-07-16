@@ -13,7 +13,7 @@ void logMessage(const char* format, ...) {
         va_end(args);
 
         // Print the formatted message
-        std::cout << "[" << Brain.timer(vex::msec) << "] ";
+        std::cout << "[" << Brain.timer(vex::sec) << "] ";
         std::cout << buffer << std::endl;
     }
 }

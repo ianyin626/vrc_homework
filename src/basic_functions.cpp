@@ -1,5 +1,6 @@
 #include "devices.h"
 #include "utilities.h"
+#include "tasks.h"
 
 #include <cstdio>
 #include <cstdlib>
@@ -151,7 +152,7 @@ void PID_forward(double target, double error_tolerance, double speed_tolerance) 
     }
     move(0, 0);
     logMessage("PID forward");
-}   
+}
 
 void PID_drift(double target_angle, double base_speed, double max_speed, double error_tolerance, double speed_tolerance) {
     long delay = 10;
@@ -197,6 +198,8 @@ void PID_drift(double target_angle, double base_speed, double max_speed, double 
     move(0, 0);
     logMessage("Exit");
 }
+
+
 
 void intake(double volt) {
     rightIntake.spin(directionType::fwd, volt * 120, voltageUnits::mV);
@@ -247,13 +250,13 @@ void initialize() {
 
 void macro_actions() {
     while (1) {
-        // if (Controller.ButtonL1.PRESSED) {
-        //     std::cout << "Controller.ButtonL1.PRESSED" << std::endl;
-        //     intake_forward(); // Note: untested
-        // } else {
-        //     std::cout << "Controller.ButtonL1.RELEASED" << std::endl;
-        //     intake_stop(); // Note: untested
-        // }
+        if (Controller.ButtonX.PRESSED) {
+            puncher_move = false;
+            puncher.spinTo(2160, rotationUnits::deg, 100, velocityUnits::pct, true);
+            puncher.setPosition(0, rotationUnits::deg);
+            puncher_move = true;
+        }
+
         if (Controller.ButtonL1.pressing()) {
             intake(100);
         } else if (Controller.ButtonL2.pressing()) {
@@ -261,6 +264,7 @@ void macro_actions() {
         } else {
             intake(0);
         }
+
         if (Controller.ButtonR1.PRESSED) {
             intake_toggle_forward();
         } else if (Controller.ButtonR2.PRESSED) {
