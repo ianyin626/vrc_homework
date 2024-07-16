@@ -146,7 +146,6 @@ void PID_forward(double target, double error_tolerance, double speed_tolerance) 
         move(total_correction, total_correction);
         past_error = current_error;
         printf("%f %f %f %f\n", current_error, error_sum, motorRate, total_correction);
-        // std::cout << porportional_correction  <<  ", " <<  integral_correction  <<  ", " << derivative_correction <<  ", " << getMotorRate() <<  std::endl;
         vexDelay(delay);
         motorRate = getMotorRate();
     }
@@ -157,8 +156,8 @@ void PID_forward(double target, double error_tolerance, double speed_tolerance) 
 void PID_drift(double target_angle, double base_speed, double max_speed, double error_tolerance, double speed_tolerance) {
     long delay = 10;
     double kp = 1.4;
-    double ki = 0.05;
-    double kd = 23;
+    double ki = 0.1;
+    double kd = 20;
     double porportional_correction = 0;
     double integral_correction = 0;
     double derivative_correction = 0;
@@ -194,7 +193,7 @@ void PID_drift(double target_angle, double base_speed, double max_speed, double 
         gyroRate = getGyroRate();
     }
     move(-100, -100);
-    vexDelay(50);
+    vexDelay(25);
     move(0, 0);
     printf("Exit\n");
 }

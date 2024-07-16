@@ -28,12 +28,19 @@ void auton_route_1() {
     task taskForward(PID_forward_100);
 }
 
+void auton_route_2() {
+    PID_forward(100, 0.5, 0.05);
+    PID_turn(180, 0.5, 0.015);
+    PID_drift(270, 50, 50, 1, 0.1);
+}
+
 void autonomous(void) {
     initialize();
+    auton_route_2();
     double timer_start = Brain.timer(msec);
     switch (route) {
-    case 0: 
-        auton_route_1();
+    case 0:
+        // auton_route_1();
         break;
 
     case 1:
