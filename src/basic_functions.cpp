@@ -1,4 +1,5 @@
 #include "devices.h"
+#include "utilities.h"
 
 #include <cstdio>
 #include <cstdlib>
@@ -26,7 +27,6 @@ void split_arcade() {
         axis1_pos = 0;
     }
     move(axis3_pos + axis1_pos, axis3_pos - axis1_pos);
-    // printf("%d %d\n", axis3_pos, axis1_pos);
 }
 
 double mod(double input, int base) {
@@ -98,13 +98,13 @@ void PID_turn(double target, double error_tolerance, double speed_tolerance) {
         move(total_correction, total_correction * -1);
         past_error = current_error;
         vexDelay(delay);
-        printf("%f %f %f %f\n", current_error, current_heading, total_correction, getGyroRate());
+        logMessage("%.3f %.3f %.3f %.3f", current_error, current_heading, total_correction, getGyroRate());
     }
-    printf("Final: current_error %f, current_heading %f, total_correction %f\n", 
+    logMessage("Final: current_error %.3f, current_heading %.3f, total_correction %.3f", 
     current_error, current_heading, total_correction);
     move(0, 0);
     double timer_end = getTimer();
-    printf("Time(ms): %f\n", timer_end - timer_start);
+    logMessage("Time(ms): %.2f", timer_end - timer_start);
     Brain.Screen.print("PID Turn End\n");
 }
 
@@ -145,12 +145,12 @@ void PID_forward(double target, double error_tolerance, double speed_tolerance) 
 
         move(total_correction, total_correction);
         past_error = current_error;
-        printf("%f %f %f %f\n", current_error, error_sum, motorRate, total_correction);
+        logMessage("%.3f %.3f %.3f %.3f", current_error, error_sum, motorRate, total_correction);
         vexDelay(delay);
         motorRate = getMotorRate();
     }
     move(0, 0);
-    printf("PID forward\n");
+    logMessage("PID forward");
 }   
 
 void PID_drift(double target_angle, double base_speed, double max_speed, double error_tolerance, double speed_tolerance) {
@@ -188,14 +188,14 @@ void PID_drift(double target_angle, double base_speed, double max_speed, double 
         
         move(base_speed + total_correction, base_speed - total_correction);
         past_error = current_error;
-        printf("%f %f %f\n", gyroRate, current_error, total_correction);
+        logMessage("%.3f %.3f %.3f", gyroRate, current_error, total_correction);
         vexDelay(delay);
         gyroRate = getGyroRate();
     }
     move(-100, -100);
     vexDelay(25);
     move(0, 0);
-    printf("Exit\n");
+    logMessage("Exit");
 }
 
 void intake(double volt) {
