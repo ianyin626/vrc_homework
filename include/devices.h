@@ -14,8 +14,8 @@ extern motor leftBack;
 extern motor rightFront;
 extern motor rightMiddle;
 extern motor rightBack;
-extern motor rightIntake;
-extern motor leftIntake;
+extern motor forwardIntake;
+extern motor backwardIntake;
 extern motor puncher;
 extern inertial Inertial;
 

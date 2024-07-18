@@ -202,13 +202,13 @@ void PID_drift(double target_angle, double base_speed, double max_speed, double 
 
 
 void intake(double volt) {
-    rightIntake.spin(directionType::fwd, volt * 120, voltageUnits::mV);
-    leftIntake.spin(directionType::fwd, volt * 120, voltageUnits::mV);
+    forwardIntake.spin(directionType::fwd, volt * 120, voltageUnits::mV);
+    backwardIntake.spin(directionType::fwd, volt * 120, voltageUnits::mV);
 }
 
 void intake_backward() {
-    rightIntake.spin(directionType::rev, 12000, voltageUnits::mV);
-    leftIntake.spin(directionType::rev, 12000, voltageUnits::mV);
+    forwardIntake.spin(directionType::rev, 12000, voltageUnits::mV);
+    backwardIntake.spin(directionType::rev, 12000, voltageUnits::mV);
 }
 
 bool intake_is_spinning = false;
@@ -218,8 +218,8 @@ void intake_toggle_forward() {
         intake(100);
         intake_is_spinning = true;
     } else {
-        rightIntake.stop();
-        leftIntake.stop();
+        forwardIntake.stop();
+        backwardIntake.stop();
         intake_is_spinning = false;
     }
  }
@@ -229,15 +229,15 @@ void intake_toggle_backward() {
         intake_backward();
         intake_is_spinning = true;
     } else {
-        rightIntake.stop();
-        leftIntake.stop();
+        forwardIntake.stop();
+        backwardIntake.stop();
         intake_is_spinning = false;
     }
 }
 
 void intake_stop() {
-    rightIntake.stop();
-    leftIntake.stop();
+    forwardIntake.stop();
+    backwardIntake.stop();
 }
 
 void initialize() {
