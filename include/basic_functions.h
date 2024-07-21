@@ -1,5 +1,6 @@
 #ifndef BASIC_FUNCTIONS_H;
 #define BASIC_FUNCTIONS_H;
+int continue_task;
 
 void move(double left_speed, double right_speed);
 void split_arcade();

@@ -5,6 +5,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <iostream>
+bool continue_task = true;
 
 void move(double left_speed, double right_speed) {
     left_speed *= 120;
@@ -250,25 +251,26 @@ void initialize() {
 
 void macro_actions() {
     while (1) {
-        if (Controller.ButtonX.PRESSED) {
-            puncher_move = false;
-            puncher.spinTo(2160, rotationUnits::deg, 100, velocityUnits::pct, true);
-            puncher.setPosition(0, rotationUnits::deg);
-            puncher_move = true;
-        }
+        if (continue_task) {
+            if (Controller.ButtonX.PRESSED) {
+                puncher_move = false;
+                puncher.spinTo(2160, rotationUnits::deg, 100, velocityUnits::pct, true);
+                puncher.setPosition(0, rotationUnits::deg);
+                puncher_move = true;
+            }
 
-        if (Controller.ButtonL1.pressing()) {
-            intake(100);
-        } else if (Controller.ButtonL2.pressing()) {
-            intake(-100);
-        } else {
-            intake(0);
-        }
-
-        if (Controller.ButtonR1.PRESSED) {
-            intake_toggle_forward();
-        } else if (Controller.ButtonR2.PRESSED) {
-            intake_toggle_backward();
+            if (Controller.ButtonL1.pressing()) {
+                intake(100);
+            } else if (Controller.ButtonL2.pressing()) {
+                intake(-100);
+            } else {
+                intake(0);
+            }
+            if (Controller.ButtonR1.PRESSED) {
+                intake_toggle_forward();
+            } else if (Controller.ButtonR2.PRESSED) {
+                intake_toggle_backward();
+            }
         }
         vexDelay(10);
     }

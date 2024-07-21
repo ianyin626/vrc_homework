@@ -3,9 +3,12 @@
 extern bool intake_positionCheck;
 extern int reverseTarget;
 extern bool puncher_move;
+extern bool continue_intake;
+extern bool intakeStop;
 extern double target;
 
 int PID_forward_intake();
 int puncher_control();
+int intake_control();
 
 #endif

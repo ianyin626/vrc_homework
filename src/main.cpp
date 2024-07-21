@@ -42,8 +42,9 @@ void auton_route_3() {
 }
 
 void autonomous(void) {
+    continue_task = false;
     initialize();
-    auton_route_3();
+    auton_route_1();
     double timer_start = Brain.timer(msec);
     switch (route) {
     case 0:
@@ -83,12 +84,21 @@ void autonomous(void) {
 }
 
 void usercontrol(void) {
+    continue_task = true;
     initialize_macros();
     puncher_move = true;
     target = 1440;
     task preset_puncher(puncher_control);
     logMessage("done presetting");
-    
+    task taskIntake(intake_control);
+    if (Controller.ButtonL1.PRESSED && !Controller.ButtonL2.PRESSED && !intakeStop) {
+        intake(100);
+    } else if (Controller.ButtonL2.PRESSED && !Controller.ButtonL1.PRESSED) {
+        intake(-100);
+    } else if (!Controller.ButtonL1.PRESSED && !Controller.ButtonL2.PRESSED) {
+        intake(0);
+        intakeStop = false;
+    }
     while (1) {
         split_arcade();
         if (Controller.ButtonY.PRESSED) {

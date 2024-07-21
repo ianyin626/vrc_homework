@@ -9,6 +9,7 @@ int reverseTarget = 0;
 bool intake_positionCheck = false;
 bool puncher_move = false;
 double target = 0;
+bool continue_intake = false;
 
 int PID_forward_intake() {
     while (1) {
@@ -34,6 +35,28 @@ int puncher_control() {
             puncher.spin(fwd, (target - puncher.position(rotationUnits::deg)) * kp * 120, voltageUnits::mV);
             logMessage("%.2f", target - puncher.position(rotationUnits::deg));
         }
+        vexDelay(10);
+    }
+    return 0;
+}
+
+bool get_intake_detected() {
+    if (distanceSensor.value() < 25) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+bool intakeStop = false;
+
+int intake_control() {
+    bool last_ring_detected = false;
+    while (1) {
+        if (get_intake_detected && !last_ring_detected) {
+            intakeStop = true;
+        }
+        last_ring_detected = true;
         vexDelay(10);
     }
     return 0;
