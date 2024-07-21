@@ -98,6 +98,8 @@ void usercontrol(void) {
     } else if (!Controller.ButtonL1.PRESSED && !Controller.ButtonL2.PRESSED) {
         intake(0);
         intakeStop = false;
+    } else {
+        intake(0);
     }
     while (1) {
         split_arcade();
