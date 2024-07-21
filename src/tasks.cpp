@@ -3,7 +3,7 @@
 #include "utilities.h"
 
 
-extern motor puncher;
+// extern motor puncher;
 int halfWayDone = 0;
 int reverseTarget = 0;
 bool intake_positionCheck = false;
@@ -33,7 +33,6 @@ int puncher_control() {
     while (1) {
         if (puncher_move) {
             puncher.spin(fwd, (target - puncher.position(rotationUnits::deg)) * kp * 120, voltageUnits::mV);
-            logMessage("%.2f", target - puncher.position(rotationUnits::deg));
         }
         vexDelay(10);
     }
@@ -41,7 +40,7 @@ int puncher_control() {
 }
 
 bool get_intake_detected() {
-    if (distanceSensor.value() < 25) {
+    if (distanceSensor.objectDistance(distanceUnits::mm) < 50) {
         return true;
     } else {
         return false;
@@ -49,14 +48,21 @@ bool get_intake_detected() {
 }
 
 bool intakeStop = false;
-
+bool last_ring_detected = false;
 int intake_control() {
-    bool last_ring_detected = false;
     while (1) {
-        if (get_intake_detected && !last_ring_detected) {
+        if (get_intake_detected() && !last_ring_detected) {
             intakeStop = true;
+            logMessage("SKIBIDI");
+            last_ring_detected = true;
         }
-        last_ring_detected = true;
+        if (Controller.ButtonL1.RELEASED) {
+            intakeStop = false;
+            last_ring_detected = true;
+        }
+        if (!get_intake_detected()) {
+            last_ring_detected = false;
+        }
         vexDelay(10);
     }
     return 0;

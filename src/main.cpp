@@ -91,18 +91,23 @@ void usercontrol(void) {
     task preset_puncher(puncher_control);
     logMessage("done presetting");
     task taskIntake(intake_control);
-    if (Controller.ButtonL1.PRESSED && !Controller.ButtonL2.PRESSED && !intakeStop) {
-        intake(100);
-    } else if (Controller.ButtonL2.PRESSED && !Controller.ButtonL1.PRESSED) {
-        intake(-100);
-    } else if (!Controller.ButtonL1.PRESSED && !Controller.ButtonL2.PRESSED) {
-        intake(0);
-        intakeStop = false;
-    } else {
-        intake(0);
-    }
+
     while (1) {
-        split_arcade();
+        if (Controller.ButtonL1.pressing() && !Controller.ButtonL2.pressing() && !intakeStop) {
+            logMessage("1");
+            intake(100);
+        } else if (Controller.ButtonL2.pressing() && !Controller.ButtonL1.pressing() && !intakeStop) {
+            logMessage("2");
+            intake(-100);
+        } else if (!Controller.ButtonL1.pressing() && !Controller.ButtonL2.pressing()) {
+            logMessage("3");
+            intake(0);
+        } else {
+            logMessage("4");
+            intake(0);
+        }
+        
+        // split_arcade();
         if (Controller.ButtonY.PRESSED) {
             route = (route + 1) % 8;
             Controller.Screen.clearLine(4);

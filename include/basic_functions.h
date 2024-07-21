@@ -1,7 +1,7 @@
 #ifndef BASIC_FUNCTIONS_H;
 #define BASIC_FUNCTIONS_H;
-int continue_task;
 
+extern bool continue_task;
 void move(double left_speed, double right_speed);
 void split_arcade();
 void PID_turn(double target, double error_tolerance, double speed_tolerance);

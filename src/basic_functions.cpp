@@ -203,13 +203,13 @@ void PID_drift(double target_angle, double base_speed, double max_speed, double 
 
 
 void intake(double volt) {
-    forwardIntake.spin(directionType::fwd, volt * 120, voltageUnits::mV);
-    backwardIntake.spin(directionType::fwd, volt * 120, voltageUnits::mV);
+    leftIntake.spin(directionType::fwd, volt * 120, voltageUnits::mV);
+    rightIntake.spin(directionType::fwd, volt * 120, voltageUnits::mV);
 }
 
 void intake_backward() {
-    forwardIntake.spin(directionType::rev, 12000, voltageUnits::mV);
-    backwardIntake.spin(directionType::rev, 12000, voltageUnits::mV);
+    leftIntake.spin(directionType::rev, 12000, voltageUnits::mV);
+    rightIntake.spin(directionType::rev, 12000, voltageUnits::mV);
 }
 
 bool intake_is_spinning = false;
@@ -219,8 +219,8 @@ void intake_toggle_forward() {
         intake(100);
         intake_is_spinning = true;
     } else {
-        forwardIntake.stop();
-        backwardIntake.stop();
+        leftIntake.stop();
+        rightIntake.stop();
         intake_is_spinning = false;
     }
  }
@@ -230,15 +230,15 @@ void intake_toggle_backward() {
         intake_backward();
         intake_is_spinning = true;
     } else {
-        forwardIntake.stop();
-        backwardIntake.stop();
+        leftIntake.stop();
+        rightIntake.stop();
         intake_is_spinning = false;
     }
 }
 
 void intake_stop() {
-    forwardIntake.stop();
-    backwardIntake.stop();
+    leftIntake.stop();
+    rightIntake.stop();
 }
 
 void initialize() {
@@ -257,14 +257,6 @@ void macro_actions() {
                 puncher.spinTo(2160, rotationUnits::deg, 100, velocityUnits::pct, true);
                 puncher.setPosition(0, rotationUnits::deg);
                 puncher_move = true;
-            }
-
-            if (Controller.ButtonL1.pressing()) {
-                intake(100);
-            } else if (Controller.ButtonL2.pressing()) {
-                intake(-100);
-            } else {
-                intake(0);
             }
             if (Controller.ButtonR1.PRESSED) {
                 intake_toggle_forward();
