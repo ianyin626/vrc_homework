@@ -42,7 +42,6 @@ void auton_route_3() {
 }
 
 void autonomous(void) {
-    continue_task = false;
     initialize();
     auton_route_1();
     double timer_start = Brain.timer(msec);
@@ -84,7 +83,6 @@ void autonomous(void) {
 }
 
 void usercontrol(void) {
-    continue_task = true;
     initialize_macros();
     puncher_move = true;
     target = 1440;
@@ -93,13 +91,13 @@ void usercontrol(void) {
     task taskIntake(intake_control);
 
     while (1) {
-        if (Controller.ButtonL1.pressing() && !Controller.ButtonL2.pressing() && !intakeStop) {
+        if (getControllerL1() && !getControllerL2() && !intakeStop) {
             logMessage("1");
             intake(100);
-        } else if (Controller.ButtonL2.pressing() && !Controller.ButtonL1.pressing() && !intakeStop) {
+        } else if (getControllerL2() && !getControllerL1() && !intakeStop) {
             logMessage("2");
             intake(-100);
-        } else if (!Controller.ButtonL1.pressing() && !Controller.ButtonL2.pressing()) {
+        } else if (!getControllerL1() && !getControllerL2()) {
             logMessage("3");
             intake(0);
         } else {
@@ -108,7 +106,7 @@ void usercontrol(void) {
         }
         
         // split_arcade();
-        if (Controller.ButtonY.PRESSED) {
+        if (getControllerButtonX()) {
             route = (route + 1) % 8;
             Controller.Screen.clearLine(4);
             Controller.Screen.setCursor(4, 1);

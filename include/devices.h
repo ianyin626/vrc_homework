@@ -53,4 +53,16 @@ inline double getMotorRate() {
     return leftFront.velocity(velocityUnits::dps) / 36000 * WHEEL_CIRCUMFERENCE_CM * MOTOR_TO_WHEEL_GEAR_RATIO; // cm/s
 }
 
+inline double getControllerL1() {
+    return Controller.ButtonL1.pressing();
+}
+
+inline double getControllerL2() {
+    return Controller.ButtonL2.pressing();
+}
+
+inline double getControllerButtonX() {
+    return Controller.ButtonY.PRESSED;
+}
+
 #endif
