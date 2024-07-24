@@ -18,6 +18,7 @@ extern motor leftIntake;
 extern motor rightIntake;
 extern motor puncher;
 extern distance distanceSensor;
+extern optical opticalSensor;
 extern inertial Inertial;
 
 #define DEBUG_MODE 1
@@ -63,6 +64,10 @@ inline double getControllerL2() {
 
 inline double getControllerButtonX() {
     return Controller.ButtonY.PRESSED;
+}
+
+inline double getOpticalHue() {
+    return opticalSensor.hue();
 }
 
 #endif

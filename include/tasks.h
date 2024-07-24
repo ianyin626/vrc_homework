@@ -7,10 +7,14 @@ extern bool puncher_move;
 extern bool continue_intake;
 extern bool get_intake_detected();
 extern bool intakeStop;
+extern bool expectedRingColor;
+extern bool intakeReverse;
 extern double target;
 
 int PID_forward_intake();
 int puncher_control();
 int intake_control();
+int opticalControl();
+int intakeReverseOptical();
 
 #endif

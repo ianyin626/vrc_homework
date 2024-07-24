@@ -2,14 +2,17 @@
 #include "basic_functions.h"
 #include "utilities.h"
 
-
-// extern motor puncher;
 int halfWayDone = 0;
 int reverseTarget = 0;
 bool intake_positionCheck = false;
 bool puncher_move = false;
 double target = 0;
 bool continue_intake = false;
+bool intakeStop = false;
+bool last_ring_detected = false;
+bool ring_detected = false;
+bool intakeReverse = false;
+bool expectedRingColor = false; // true = blue, false = red
 
 int PID_forward_intake() {
     while (1) {
@@ -47,21 +50,46 @@ bool get_intake_detected() {
     }
 }
 
-bool intakeStop = false;
-bool last_ring_detected = false;
 int intake_control() {
     while (1) {
-        if (get_intake_detected() && !last_ring_detected) {
+        ring_detected = get_intake_detected();
+        if (ring_detected && !last_ring_detected) {
             intakeStop = true;
-            logMessage("SKIBIDI");
-            last_ring_detected = true;
         }
-        if (Controller.ButtonL1.RELEASED) {
+        if (!getControllerL1()) {
             intakeStop = false;
-            last_ring_detected = true;
         }
-        if (!get_intake_detected()) {
-            last_ring_detected = false;
+        last_ring_detected = ring_detected;
+        vexDelay(10);
+    }
+    return 0;
+}
+
+int opticalControl() {
+    opticalSensor.setLight(ledState::on);
+    while(1) {
+        if (opticalSensor.isNearObject() && (getOpticalHue() < 100) && expectedRingColor) {
+            intakeReverse = true;
+        } else if (opticalSensor.isNearObject() && (getOpticalHue() > 100) && !expectedRingColor) {
+            intakeReverse = true;
+        } else {
+        }
+        vexDelay(10);
+    }
+    return 0;
+}
+
+int intakeReverseOptical() {
+    while (1) {
+        if (intakeReverse) {
+            leftIntake.resetPosition();
+            while (fabs(leftIntake.position(rotationUnits::rev)) < 17.5) {
+                intake(-100);
+                vexDelay(10);
+                logMessage("%.3f", leftIntake.position(rotationUnits::rev));
+            }
+            intake(0);
+            intakeReverse = false;
         }
         vexDelay(10);
     }

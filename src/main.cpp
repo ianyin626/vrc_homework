@@ -17,8 +17,7 @@ using namespace vex;
 competition Competition;
 int route = 0;
 
-
-void pre_auton(void) {
+void pre_auton() {
 
 }
 
@@ -30,9 +29,7 @@ void auton_route_1() {
 }
 
 void auton_route_2() {
-    PID_forward(100, 0.5, 0.05);
-    PID_turn(180, 0.5, 0.015);
-    PID_drift(270, 50, 50, 1, 0.1);
+    PID_turn(90, 0.5, 0.015);
 }
 
 void auton_route_3() {
@@ -43,11 +40,10 @@ void auton_route_3() {
 
 void autonomous(void) {
     initialize();
-    auton_route_1();
+    auton_route_2();
     double timer_start = Brain.timer(msec);
     switch (route) {
     case 0:
-        // auton_route_1();
         break;
 
     case 1:
@@ -76,35 +72,29 @@ void autonomous(void) {
     while (1) {
         vexDelay(10);
     }
-    
-    // PID_turn(90, 0.5, 0.015);
-    // PID_forward(100, 0.5, 0.05);
-    // PID_drift(90, 50, 50, 1, 0.1);
 }
 
 void usercontrol(void) {
+    expectedRingColor = true;
     initialize_macros();
-    puncher_move = true;
     target = 1440;
+    puncher_move = true;
     task preset_puncher(puncher_control);
-    logMessage("done presetting");
-    task taskIntake(intake_control);
-
+    // task taskIntake(intake_control);
+    task taskOptical(opticalControl);
+    task taskOptical2(intakeReverseOptical);
     while (1) {
-        if (getControllerL1() && !getControllerL2() && !intakeStop) {
-            logMessage("1");
-            intake(100);
-        } else if (getControllerL2() && !getControllerL1() && !intakeStop) {
-            logMessage("2");
-            intake(-100);
-        } else if (!getControllerL1() && !getControllerL2()) {
-            logMessage("3");
-            intake(0);
-        } else {
-            logMessage("4");
-            intake(0);
+        if (!intakeReverse) {
+            if (getControllerL1() && !getControllerL2() && !intakeStop) {
+                intake(100);
+            } else if (getControllerL2() && !getControllerL1() && !intakeStop) {
+                intake(-100);
+            } else if (!getControllerL1() && !getControllerL2()) {
+                intake(0);
+            } else {
+                intake(0);
+            }
         }
-        
         // split_arcade();
         if (getControllerButtonX()) {
             route = (route + 1) % 8;
