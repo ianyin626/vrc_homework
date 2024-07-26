@@ -11,6 +11,7 @@ void intake(double volt);
 void intake_backward();
 void intake_toggle_forward();
 void intake_toggle_backward();
+void intakeControl();
 void intake_stop();
 void initialize();
 void initialize_macros();

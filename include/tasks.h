@@ -16,5 +16,6 @@ int puncher_control();
 int intake_control();
 int opticalControl();
 int intakeReverseOptical();
+int getColor();
 
 #endif

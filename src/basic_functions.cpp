@@ -236,6 +236,17 @@ void intake_toggle_backward() {
     }
 }
 
+bool cylinderOpen = false;
+void cylinderControl() {
+    if (!cylinderOpen) {
+        Pneumatics.open();
+        cylinderOpen = true;
+    } else {
+        Pneumatics.close();
+        cylinderOpen = false;
+    }
+}
+
 void intake_stop() {
     leftIntake.stop();
     rightIntake.stop();
@@ -251,19 +262,23 @@ void initialize() {
 
 void macro_actions() {
     while (1) {
-        if (continue_task) {
-            if (Controller.ButtonX.PRESSED) {
-                puncher_move = false;
-                puncher.spinTo(2160, rotationUnits::deg, 100, velocityUnits::pct, true);
-                puncher.setPosition(0, rotationUnits::deg);
-                puncher_move = true;
-            }
-            if (Controller.ButtonR1.PRESSED) {
-                intake_toggle_forward();
-            } else if (Controller.ButtonR2.PRESSED) {
-                intake_toggle_backward();
-            }
+        // if (continue_task) {
+        if (Controller.ButtonX.PRESSED) {
+            puncher_move = false;
+            puncher.spinTo(2160, rotationUnits::deg, 100, velocityUnits::pct, true);
+            puncher.setPosition(0, rotationUnits::deg);
+            puncher_move = true;
         }
+        if (Controller.ButtonA.PRESSED) {
+            logMessage("hheelllloo");
+            cylinderControl();
+        }
+        if (Controller.ButtonR1.PRESSED) {
+            intake_toggle_forward();
+        } else if (Controller.ButtonR2.PRESSED) {
+            intake_toggle_backward();
+        }
+        // }
         vexDelay(10);
     }
 }

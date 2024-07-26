@@ -20,6 +20,7 @@ extern motor puncher;
 extern distance distanceSensor;
 extern optical opticalSensor;
 extern inertial Inertial;
+extern pneumatics Pneumatics;
 
 #define DEBUG_MODE 1
 #define WHEEL_CIRCUMFERENCE_CM 31.9185

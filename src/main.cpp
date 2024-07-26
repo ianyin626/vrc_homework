@@ -75,11 +75,10 @@ void autonomous(void) {
 }
 
 void usercontrol(void) {
+    Pneumatics.close();
     expectedRingColor = true;
     initialize_macros();
     target = 1440;
-    puncher_move = true;
-    task preset_puncher(puncher_control);
     // task taskIntake(intake_control);
     task taskOptical(opticalControl);
     task taskOptical2(intakeReverseOptical);
@@ -95,7 +94,8 @@ void usercontrol(void) {
                 intake(0);
             }
         }
-        // split_arcade();
+        split_arcade();
+        expectedRingColor = true;
         if (getControllerButtonX()) {
             route = (route + 1) % 8;
             Controller.Screen.clearLine(4);
@@ -107,8 +107,10 @@ void usercontrol(void) {
             
             case 1:
                 Controller.Screen.print("route 2");
+                expectedRingColor = false;
+                split_arcade();
                 break;
-            
+
             case 2:
                 Controller.Screen.print("route 3");
                 break;

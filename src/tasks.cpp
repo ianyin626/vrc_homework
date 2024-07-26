@@ -73,6 +73,7 @@ int opticalControl() {
         } else if (opticalSensor.isNearObject() && (getOpticalHue() > 100) && !expectedRingColor) {
             intakeReverse = true;
         } else {
+            intakeReverse = intakeReverse;
         }
         vexDelay(10);
     }
@@ -83,15 +84,23 @@ int intakeReverseOptical() {
     while (1) {
         if (intakeReverse) {
             leftIntake.resetPosition();
-            while (fabs(leftIntake.position(rotationUnits::rev)) < 17.5) {
-                intake(-100);
+                intake(0);
                 vexDelay(10);
                 logMessage("%.3f", leftIntake.position(rotationUnits::rev));
-            }
             intake(0);
             intakeReverse = false;
         }
         vexDelay(10);
     }
     return 0;
+}
+
+int getColor() {
+    if (opticalSensor.hue() < 30 && opticalSensor.isNearObject()) {
+        return 2; // red
+    } else if (opticalSensor.hue() > 100) {
+        return 1; // blue
+    } else {
+        return 0; // nothing
+    }
 }
