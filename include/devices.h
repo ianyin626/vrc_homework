@@ -67,6 +67,10 @@ inline double getControllerButtonX() {
     return Controller.ButtonY.PRESSED;
 }
 
+inline double getControllerButtonY() {
+    return Controller.ButtonY.PRESSED;
+}
+
 inline double getOpticalHue() {
     return opticalSensor.hue();
 }

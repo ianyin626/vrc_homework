@@ -72,8 +72,6 @@ int opticalControl() {
             intakeReverse = true;
         } else if (opticalSensor.isNearObject() && (getOpticalHue() > 100) && !expectedRingColor) {
             intakeReverse = true;
-        } else {
-            intakeReverse = intakeReverse;
         }
         vexDelay(10);
     }

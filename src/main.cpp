@@ -75,8 +75,9 @@ void autonomous(void) {
 }
 
 void usercontrol(void) {
-    Pneumatics.close();
     expectedRingColor = true;
+    Controller.Screen.print("ExpectedColor: %s", expectedRingColor ? "blue": "red ");
+    Pneumatics.close();
     initialize_macros();
     target = 1440;
     // task taskIntake(intake_control);
@@ -95,46 +96,11 @@ void usercontrol(void) {
             }
         }
         split_arcade();
-        expectedRingColor = true;
-        if (getControllerButtonX()) {
-            route = (route + 1) % 8;
+        if (getControllerButtonY()) {
+            expectedRingColor = !expectedRingColor;
             Controller.Screen.clearLine(4);
             Controller.Screen.setCursor(4, 1);
-            switch (route) {
-            case 0:
-                Controller.Screen.print("route 1");
-                break;
-            
-            case 1:
-                Controller.Screen.print("route 2");
-                expectedRingColor = false;
-                split_arcade();
-                break;
-
-            case 2:
-                Controller.Screen.print("route 3");
-                break;
-
-            case 3:
-                Controller.Screen.print("route 4");
-                break;
-            
-            case 4:
-                Controller.Screen.print("route 5");
-                break;
-
-            case 5:
-                Controller.Screen.print("route 6");
-                break;
-
-            case 6:
-                Controller.Screen.print("route 7");
-                break;
-
-            case 7:
-                Controller.Screen.print("route 8");
-                break;
-            }
+            Controller.Screen.print("ExpectedColor: %s", expectedRingColor ? "blue": "red ");
         }
         vexDelay(10);
     }
