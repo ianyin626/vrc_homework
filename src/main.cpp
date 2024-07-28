@@ -81,8 +81,10 @@ void usercontrol(void) {
     initialize_macros();
     target = 1440;
     // task taskIntake(intake_control);
-    task taskOptical(opticalControl);
-    task taskOptical2(intakeReverseOptical);
+    // task taskOptical(opticalControl);
+    // task taskOptical2(intakeReverseOptical);
+    task taskDetectRingStatus(detectRingStatus);
+    task taskDetectRingLeave(detectRingLeave);
     while (1) {
         if (!intakeReverse) {
             if (getControllerL1() && !getControllerL2() && !intakeStop) {

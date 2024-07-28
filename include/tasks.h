@@ -17,5 +17,7 @@ int intake_control();
 int opticalControl();
 int intakeReverseOptical();
 int getColor();
+int detectRingStatus();
+int detectRingLeave();
 
 #endif
