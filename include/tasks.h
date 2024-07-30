@@ -10,6 +10,7 @@ extern bool intakeStop;
 extern bool expectedRingColor;
 extern bool intakeReverse;
 extern double target;
+extern bool intakeReversing;
 
 int PID_forward_intake();
 int puncher_control();

@@ -13,6 +13,7 @@ bool last_ring_detected = false;
 bool ring_detected = false;
 bool intakeReverse = false;
 bool expectedRingColor = false; // true = blue, false = red
+bool intakeReversing = false;
 int Cabin[3][2] = {{0, 0}, {0, 0}, {0, 0}};
 
 int PID_forward_intake() {
@@ -114,6 +115,16 @@ void pushCabin(int Position, int Color) {
     logMessage("PushCabin: %d, %d, %d, %d, %d, %d", Cabin[2][0], Cabin[2][1], Cabin[1][0], Cabin[1][1], Cabin[0][0], Cabin[0][1]);
 }
 
+void unpushCabin() {
+    Cabin[0][0] = Cabin[1][0];
+    Cabin[0][1] = Cabin[1][1];
+    Cabin[1][0] = Cabin[2][0];
+    Cabin[1][1] = Cabin[2][1];
+    Cabin[2][0] = 0;
+    Cabin[2][1] = 0;
+    logMessage("unpushCabin");
+}
+
 void clearCabin(int row) { // row is the first number in Cabin
     Cabin[row][0] = 0;
     Cabin[row][1] = 0;
@@ -130,8 +141,10 @@ int detectRingStatus() {
         } else if ((opticalSensor.hue() > 100) && opticalSensor.isNearObject()) {
             ringColor = 2;
         }
-        if (lastRingColor != ringColor) {
+        if ((lastRingColor != ringColor) && !intakeReversing) {
             pushCabin((int)leftIntake.position(rotationUnits::deg), ringColor);
+        } else if ((lastRingColor != ringColor) && intakeReversing) {
+            unpushCabin();
         }
         lastRingColor = ringColor;
         vexDelay(10);

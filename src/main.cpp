@@ -89,8 +89,10 @@ void usercontrol(void) {
         if (!intakeReverse) {
             if (getControllerL1() && !getControllerL2() && !intakeStop) {
                 intake(100);
+                intakeReversing = false;
             } else if (getControllerL2() && !getControllerL1() && !intakeStop) {
                 intake(-100);
+                intakeReversing = true;
             } else if (!getControllerL1() && !getControllerL2()) {
                 intake(0);
             } else {
