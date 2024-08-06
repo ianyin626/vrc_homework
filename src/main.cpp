@@ -75,8 +75,8 @@ void autonomous(void) {
 }
 
 void usercontrol(void) {
-    expectedRingColor = true;
-    Controller.Screen.print("ExpectedColor: %s", expectedRingColor ? "blue": "red ");
+    expectedRingColor = 2;
+    Controller.Screen.print("ExpectedColor: %s", expectedRingColor == 2 ? "blue": "red ");
     Pneumatics.close();
     initialize_macros();
     target = 1440;
@@ -88,23 +88,23 @@ void usercontrol(void) {
     while (1) {
         if (!intakeReverse) {
             if (getControllerL1() && !getControllerL2() && !intakeStop) {
-                intake(100);
+                // intake(100);
                 intakeReversing = false;
             } else if (getControllerL2() && !getControllerL1() && !intakeStop) {
-                intake(-100);
+                // intake(-100);
                 intakeReversing = true;
             } else if (!getControllerL1() && !getControllerL2()) {
-                intake(0);
+                // intake(0);
             } else {
-                intake(0);
+                // intake(0);
             }
         }
         split_arcade();
         if (getControllerButtonY()) {
-            expectedRingColor = !expectedRingColor;
+            expectedRingColor = expectedRingColor == 2 ? 1: 2;
             Controller.Screen.clearLine(4);
             Controller.Screen.setCursor(4, 1);
-            Controller.Screen.print("ExpectedColor: %s", expectedRingColor ? "blue": "red ");
+            Controller.Screen.print("ExpectedColor: %s", expectedRingColor == 2 ? "blue": "red ");
         }
         vexDelay(10);
     }

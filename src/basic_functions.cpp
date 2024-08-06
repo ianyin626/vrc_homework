@@ -270,13 +270,23 @@ void macro_actions() {
             puncher_move = true;
         }
         if (Controller.ButtonA.PRESSED) {
-            logMessage("hheelllloo");
             cylinderControl();
         }
         if (Controller.ButtonR1.PRESSED) {
             intake_toggle_forward();
         } else if (Controller.ButtonR2.PRESSED) {
             intake_toggle_backward();
+        }
+        if (Controller.ButtonB.PRESSED) {
+            while (1) {
+                intake(100);
+                if (opticalSensor.hue() < 50 && opticalSensor.isNearObject() && leftIntake.position(deg) > 720) {
+                    intake(-100);
+                    vexDelay(500);
+                }
+                intake(100);
+                vexDelay(10);
+            }
         }
         // }
         vexDelay(10);

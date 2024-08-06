@@ -12,7 +12,7 @@ bool intakeStop = false;
 bool last_ring_detected = false;
 bool ring_detected = false;
 bool intakeReverse = false;
-bool expectedRingColor = false; // true = blue, false = red
+int expectedRingColor = 0; // 0 = NAN, 1 = red, 2 = blue
 bool intakeReversing = false;
 int Cabin[3][2] = {{0, 0}, {0, 0}, {0, 0}};
 
@@ -70,9 +70,9 @@ int intake_control() {
 int opticalControl() {
     opticalSensor.setLight(ledState::on);
     while(1) {
-        if (opticalSensor.isNearObject() && (getOpticalHue() < 100) && expectedRingColor) {
+        if (opticalSensor.isNearObject() && (getOpticalHue() < 100) && expectedRingColor == 2) {
             intakeReverse = true;
-        } else if (opticalSensor.isNearObject() && (getOpticalHue() > 100) && !expectedRingColor) {
+        } else if (opticalSensor.isNearObject() && (getOpticalHue() > 100) && expectedRingColor == 1) {
             intakeReverse = true;
         }
         vexDelay(10);
@@ -122,7 +122,7 @@ void unpushCabin() {
     Cabin[1][1] = Cabin[2][1];
     Cabin[2][0] = 0;
     Cabin[2][1] = 0;
-    logMessage("unpushCabin");
+    logMessage("unpushCabin: %d, %d, %d, %d, %d, %d", Cabin[2][0], Cabin[2][1], Cabin[1][0], Cabin[1][1], Cabin[0][0], Cabin[0][1]);
 }
 
 void clearCabin(int row) { // row is the first number in Cabin
@@ -131,7 +131,14 @@ void clearCabin(int row) { // row is the first number in Cabin
     logMessage("clearCabin: %d", row);
 }
 
+// updateCabin is to make sure that the throwRing is accurate with where the ring actually is, as when the ring goes into the intake,
+// it has to wait for the hook to hook up the intake.
+void updateCabin(int row) {
+    Cabin[row][0] = leftIntake.position(rotationUnits::deg) - 400; // ring leaving optical sensor pos - hook hooking up ring pos
+}
+
 int ringColor = 0; // 0 = NAN, 2 = blue, 1 = red
+bool lastOpticalNearObject = false;
 int detectRingStatus() {
     int lastRingColor = 0;
     while (1) {
@@ -141,22 +148,39 @@ int detectRingStatus() {
         } else if ((opticalSensor.hue() > 100) && opticalSensor.isNearObject()) {
             ringColor = 2;
         }
-        if ((lastRingColor != ringColor) && !intakeReversing) {
+        if (lastRingColor != ringColor && ringColor != 0 && !intakeReversing) {
             pushCabin((int)leftIntake.position(rotationUnits::deg), ringColor);
-        } else if ((lastRingColor != ringColor) && intakeReversing) {
+        } else if (lastRingColor != ringColor && ringColor != 0 && intakeReversing) {
             unpushCabin();
         }
+        if (lastRingColor != ringColor && ringColor == 0 && !intakeReversing) {
+            updateCabin(0);
+        }
         lastRingColor = ringColor;
+        lastOpticalNearObject = opticalSensor.isNearObject();
         vexDelay(10);
     }
     return 0;
 }
 
+void throwRing() {
+    double startingPosition = leftIntake.position(rotationUnits::deg);
+    intake(-100);
+    while (startingPosition - leftIntake.position(rotationUnits::deg) < 200) {
+        vexDelay(10);
+    }
+    intake(0);
+}
+
 int detectRingLeave() {
     while (1) {
         for (int row = 2; row >= 0; row--) {
-            if (Cabin[row][0] > 0 && ((leftIntake.position(rotationUnits::deg) - Cabin[row][0]) > 1800)) {
+            if (Cabin[row][0] > 0 && ((leftIntake.position(rotationUnits::deg) - Cabin[row][0]) > 3600)) {
                 clearCabin(row);
+            }
+            if (Cabin[row][0] > 0 && Cabin[row][1] != expectedRingColor && ((leftIntake.position(rotationUnits::deg) - Cabin[row][0]) > 2100)) {
+                logMessage("Color,Row: %d %d", Cabin[row][1], row);
+                throwRing();
             }
         }
         vexDelay(10);

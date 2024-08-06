@@ -75,4 +75,8 @@ inline double getOpticalHue() {
     return opticalSensor.hue();
 }
 
+inline double getIntakeForward() {
+    
+}
+
 #endif
