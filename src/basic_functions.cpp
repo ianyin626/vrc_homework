@@ -215,13 +215,13 @@ void encoderForward(double target, double speed) {
 }
 
 void intake(double volt) {
-    leftIntake.spin(directionType::fwd, volt * 120, voltageUnits::mV);
-    // rightIntake.spin(directionType::fwd, volt * 120, voltageUnits::mV);
+    upIntake.spin(directionType::fwd, volt * 120, voltageUnits::mV);
+    downIntake.spin(directionType::fwd, volt * 120, voltageUnits::mV);
 }
 
 void intake_backward() {
-    leftIntake.spin(directionType::rev, 12000, voltageUnits::mV);
-    // rightIntake.spin(directionType::rev, 12000, voltageUnits::mV);
+    upIntake.spin(directionType::rev, 12000, voltageUnits::mV);
+    downIntake.spin(directionType::rev, 12000, voltageUnits::mV);
 }
 
 bool intake_is_spinning = false;
@@ -231,8 +231,8 @@ void intake_toggle_forward() {
         intake(100);
         intake_is_spinning = true;
     } else {
-        // leftIntake.stop();
-        // rightIntake.stop();
+        // upIntake.stop();
+        // downIntake.stop();
         intake_is_spinning = false;
     }
  }
@@ -242,8 +242,8 @@ void intake_toggle_backward() {
         intake_backward();
         intake_is_spinning = true;
     } else {
-        // leftIntake.stop();
-        // rightIntake.stop();
+        // upIntake.stop();
+        // downIntake.stop();
         intake_is_spinning = false;
     }
 }
@@ -280,7 +280,7 @@ void macro_actions() {
         if (Controller.ButtonB.PRESSED) {
             while (true) {
                 intake(100);
-                if (opticalSensor.hue() < 50 && opticalSensor.isNearObject() && leftIntake.position(deg) > 720) {
+                if (opticalSensor.hue() < 50 && opticalSensor.isNearObject() && upIntake.position(deg) > 720) {
                     intake(-100);
                     vexDelay(500);
                 }

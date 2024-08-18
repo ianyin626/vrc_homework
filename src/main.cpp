@@ -34,8 +34,8 @@ void auton15sec() {
     PID_forward(60, 0.5, 0.15, 1);
     PID_turn(-180, 0.75, 0.02);
     encoderForward(15, 65);
-    encoderForward(10, 20); // keeps moving slowly when robot is intaking ring
-    vexDelay(1000);
+    encoderForward(20, 20); // keeps moving slowly when robot is intaking ring
+    vexDelay(1300);
     PID_forward(-30, 0.5, 0.15, 1);
     PID_turn(-160, 0.75, 0.02);
     encoderForward(15, 60);
@@ -44,7 +44,7 @@ void auton15sec() {
     PID_forward(-40, 0.5, 0.15, 1);
     PID_turn(0, 0.75, 0.2);
     PID_forward(85, 0.05, 0.15, 1);
-    PID_turn(90, 0.75, 0.02);
+    PID_turn(90, 0.75, 0.2);
     Hook.close();
     encoderForward(50, 70);
     PID_forward(120, 0.5, 0.15, 0.4);
@@ -115,15 +115,15 @@ void usercontrol(void) {
     while (true) {
         if (!intakeReverse) {
             if (getControllerL1() && !getControllerL2() && !intakeStop) {
-                // intake(100);
+                intake(100);
                 intakeReversing = false;
             } else if (getControllerL2() && !getControllerL1() && !intakeStop) {
-                // intake(-100);
+                intake(-100);
                 intakeReversing = true;
             } else if (!getControllerL1() && !getControllerL2()) {
-                // intake(0);
+                intake(0);
             } else {
-                // intake(0);
+                intake(0);
             }
         }
         split_arcade();
