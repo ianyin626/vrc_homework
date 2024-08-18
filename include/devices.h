@@ -15,12 +15,16 @@ extern motor rightFront;
 extern motor rightMiddle;
 extern motor rightBack;
 extern motor leftIntake;
-extern motor rightIntake;
+// extern motor rightIntake;
 extern motor puncher;
+extern motor leftLift;
+extern motor rightLift;
 extern distance distanceSensor;
 extern optical opticalSensor;
+extern optical opticalUp;
 extern inertial Inertial;
-extern pneumatics Pneumatics;
+extern pneumatics Hook;
+extern pneumatics Arm;
 
 #define DEBUG_MODE 1
 #define WHEEL_CIRCUMFERENCE_CM 31.9185
@@ -32,7 +36,7 @@ inline double getInertial() {
 }
 
 inline double getGyroRate() {
-    return fabs(Inertial.gyroRate(zaxis, dps)) / 100;
+    return Inertial.gyroRate(zaxis, dps) / 100;
 }
 
 inline int getAxis3() {
@@ -77,6 +81,10 @@ inline double getOpticalHue() {
 
 inline double getIntakeForward() {
     
+}
+
+inline double getControllerButtonUp() {
+    return Controller.ButtonUp.PRESSED;
 }
 
 #endif

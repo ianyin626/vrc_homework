@@ -20,5 +20,9 @@ int intakeReverseOptical();
 int getColor();
 int detectRingStatus();
 int detectRingLeave();
+int detectRobotStatus();
+int autonRouteSelect();
+int detectRingThrow();
+int detectRingStatusUp();
 
 #endif

@@ -15,61 +15,88 @@
 using namespace vex;
 
 competition Competition;
-int route = 0;
 
 void pre_auton() {
-
 }
 
-void auton_route_1() {
-    reverseTarget = 75;
-    intake_positionCheck = true;
-    task taskIntake(PID_forward_intake);
-    PID_forward(150, 0.5, 0.05);
+void auton_route_test() {
+    PID_drift(180, 50, 100, 0.5, 0.1);
 }
 
-void auton_route_2() {
-    PID_turn(90, 0.5, 0.015);
+void auton15sec() {
+    encoderForward(-40, -100);
+    encoderForward(-60, -30);
+    Hook.open();
+    encoderForward(-10, -30);
+    PID_forward(15, 0.5, 0.15, 0.8);
+    intake(100);
+    PID_turn(-100, 0.75, 0.03);
+    PID_forward(60, 0.5, 0.15, 1);
+    PID_turn(-180, 0.75, 0.02);
+    encoderForward(15, 65);
+    encoderForward(10, 20); // keeps moving slowly when robot is intaking ring
+    vexDelay(1000);
+    PID_forward(-30, 0.5, 0.15, 1);
+    PID_turn(-160, 0.75, 0.02);
+    encoderForward(15, 60);
+    encoderForward(20, 20);
+    vexDelay(300);
+    PID_forward(-40, 0.5, 0.15, 1);
+    PID_turn(0, 0.75, 0.2);
+    PID_forward(85, 0.05, 0.15, 1);
+    PID_turn(90, 0.75, 0.02);
+    Hook.close();
+    encoderForward(50, 70);
+    PID_forward(120, 0.5, 0.15, 0.4);
+    vexDelay(1000);
+    intake(0);
+    PID_forward(-50, 0.5, 0.15, 0.6);
+    PID_turn(180, 0.75, 0.02);
+    encoderForward(50, 40);
 }
 
-void auton_route_3() {
-    target = 2100;   // ready: 1440 deg       launch: 2100
-    puncher_move = true;
-    task taskPuncher(puncher_control);
+void presetThrowRing() {
+    initialize();
+    task taskDetectRingStatus(detectRingStatusUp);
+    task taskDetectRingLeave(detectRingThrow);
+    Hook.open();
+    expectedRingColor = 2;
+    intake(100);
 }
 
 void autonomous(void) {
-    initialize();
-    auton_route_2();
-    double timer_start = Brain.timer(msec);
+    // auton15sec();
     switch (route) {
     case 0:
+        vexDelay(5000);
+        auton15sec();
         break;
-
+    
     case 1:
+        Hook.open();
+        presetThrowRing();
         break;
-
+    
     case 2:
         break;
-
+    
     case 3:
         break;
-
+    
     case 4:
         break;
-
+    
     case 5:
         break;
-
+    
     case 6:
         break;
-
+    
     case 7:
         break;
     }
-    double timer_end = Brain.timer(msec);
-    logMessage("%.2f\n", timer_end - timer_start);
-    while (1) {
+
+    while (true) {
         vexDelay(10);
     }
 }
@@ -77,15 +104,15 @@ void autonomous(void) {
 void usercontrol(void) {
     expectedRingColor = 2;
     Controller.Screen.print("ExpectedColor: %s", expectedRingColor == 2 ? "blue": "red ");
-    Pneumatics.close();
-    initialize_macros();
+    Hook.open();
+    // initialize_macros();
     target = 1440;
     // task taskIntake(intake_control);
     // task taskOptical(opticalControl);
     // task taskOptical2(intakeReverseOptical);
-    task taskDetectRingStatus(detectRingStatus);
-    task taskDetectRingLeave(detectRingLeave);
-    while (1) {
+    // task taskDetectRingStatus(detectRingStatus);
+    // task taskDetectRingLeave(detectRingLeave);
+    while (true) {
         if (!intakeReverse) {
             if (getControllerL1() && !getControllerL2() && !intakeStop) {
                 // intake(100);
@@ -108,9 +135,14 @@ void usercontrol(void) {
         }
         vexDelay(10);
     }
+    if (getControllerButtonX()) {
+        Hook.open();
+    }
 }
 
 int main() {
+    task taskDetectStatus(detectRobotStatus);
+    task taskRouteSelect(autonRouteSelect);
     Competition.autonomous(autonomous);
     Competition.drivercontrol(usercontrol);
 

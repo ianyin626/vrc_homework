@@ -3,16 +3,20 @@
 // Define global variables
 brain Brain;
 controller Controller;
-motor leftFront(PORT1, ratio6_1, true);
-motor leftMiddle(PORT2, ratio6_1, true);
-motor leftBack(PORT3, ratio6_1, false);
-motor rightFront(PORT4, ratio6_1, false);
-motor rightMiddle(PORT5, ratio6_1, false);
-motor rightBack(PORT6, ratio6_1, true);
+motor leftFront(PORT4, ratio6_1, true);
+motor leftMiddle(PORT5, ratio6_1, true);
+motor leftBack(PORT6, ratio6_1, true);
+motor rightFront(PORT1, ratio6_1, false);
+motor rightMiddle(PORT2, ratio6_1, false);
+motor rightBack(PORT3, ratio6_1, false);
 motor leftIntake(PORT7, ratio6_1, false);
-motor rightIntake(PORT20, ratio6_1, true);
-motor puncher(PORT1, ratio6_1, false); // doesn't exist
+// motor rightIntake(PORT20, ratio6_1, true);
+motor puncher(PORT19, ratio6_1, false); // doesn't exist
+motor leftLift(PORT8, ratio18_1, true);
+motor rightLift(PORT9, ratio18_1, false);
 optical opticalSensor(PORT20);
+optical opticalUp(PORT16);
 distance distanceSensor(PORT13);
-inertial Inertial(PORT3); // doesn't exist
-pneumatics Pneumatics(Brain.ThreeWirePort.A);
+inertial Inertial(PORT14);
+pneumatics Hook(Brain.ThreeWirePort.A);
+pneumatics Arm(Brain.ThreeWirePort.D);

@@ -5,6 +5,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <iostream>
+int route = 0;
 bool continue_task = true;
 
 void move(double left_speed, double right_speed) {
@@ -62,13 +63,20 @@ double cap(double input, uint32_t max_value) {
     return input;
 }
 
+double getSign(double input) {
+    if (input >= 0) {
+        return 1;
+    } else {
+        return -1;
+    }
+}
+
 void PID_turn(double target, double error_tolerance, double speed_tolerance) {
-    Brain.Screen.print("PID Turn Start\n");
     double timer_start = getTimer();
     long delay = 10;
     double kp = 2;
-    double ki = 0.2;
-    double kd = 15;
+    double ki = 0.1;
+    double kd = 15.5;
     double porportional_correction = 0;
     double integral_correction = 0;
     double derivative_correction = 0;
@@ -100,25 +108,22 @@ void PID_turn(double target, double error_tolerance, double speed_tolerance) {
         move(total_correction, total_correction * -1);
         past_error = current_error;
         vexDelay(delay);
-        logMessage("%.3f %.3f %.3f %.3f", current_error, current_heading, total_correction, getGyroRate());
+        // logMessage("%.2f, %.1f, %.2f", current_error, error_sum, getGyroRate());
     }
-    logMessage("Final: current_error %.3f, current_heading %.3f, total_correction %.3f", 
-    current_error, current_heading, total_correction);
     move(0, 0);
     double timer_end = getTimer();
     logMessage("Time(ms): %.2f", timer_end - timer_start);
-    Brain.Screen.print("PID Turn End\n");
 }
 
-void PID_forward(double target, double error_tolerance, double speed_tolerance) {
-    Brain.Screen.print("PID_forward starting/n");
+void PID_forward(double target, double error_tolerance, double speed_tolerance, double speedPercentage) {
     long delay = 10;
-    double kp = 3.2;
+    double kp = 3;
     double ki = 0.1;
     double kd = 25;
     double porportional_correction = 0;
     double integral_correction = 0;
     double derivative_correction = 0;
+    leftFront.setPosition(0, rotationUnits::deg);
     double current_position = getPosition();
     double target_distance = target;
     double current_error = target_distance - current_position;
@@ -130,7 +135,7 @@ void PID_forward(double target, double error_tolerance, double speed_tolerance) 
 
     while (fabs(current_error) > error_tolerance || fabs(motorRate) > speed_tolerance) {
         current_position = getPosition();
-        current_error = target_distance - current_position;
+        current_error = target - current_position;
 
         if (fabs(current_error) < integral_range) {
             error_sum = error_sum + current_error;
@@ -145,9 +150,9 @@ void PID_forward(double target, double error_tolerance, double speed_tolerance) 
         derivative_correction = motorRate * -1 * kd;
         total_correction = porportional_correction + integral_correction + derivative_correction;
 
-        move(total_correction, total_correction);
+        move(total_correction * speedPercentage, total_correction * speedPercentage);
         past_error = current_error;
-        logMessage("%.3f %.3f %.3f %.3f", current_error, error_sum, motorRate, total_correction);
+        // logMessage("%.2f %.2f", current_error, getMotorRate());
         vexDelay(delay);
         motorRate = getMotorRate();
     }
@@ -200,16 +205,23 @@ void PID_drift(double target_angle, double base_speed, double max_speed, double 
     logMessage("Exit");
 }
 
-
+void encoderForward(double target, double speed) {
+    double startPosition = getPosition();
+    while(getSign(speed) * target > getSign(speed) * (getPosition() - startPosition)) {
+        move(speed, speed);
+        vexDelay(10);
+    }
+    move(0, 0);
+}
 
 void intake(double volt) {
     leftIntake.spin(directionType::fwd, volt * 120, voltageUnits::mV);
-    rightIntake.spin(directionType::fwd, volt * 120, voltageUnits::mV);
+    // rightIntake.spin(directionType::fwd, volt * 120, voltageUnits::mV);
 }
 
 void intake_backward() {
     leftIntake.spin(directionType::rev, 12000, voltageUnits::mV);
-    rightIntake.spin(directionType::rev, 12000, voltageUnits::mV);
+    // rightIntake.spin(directionType::rev, 12000, voltageUnits::mV);
 }
 
 bool intake_is_spinning = false;
@@ -219,8 +231,8 @@ void intake_toggle_forward() {
         intake(100);
         intake_is_spinning = true;
     } else {
-        leftIntake.stop();
-        rightIntake.stop();
+        // leftIntake.stop();
+        // rightIntake.stop();
         intake_is_spinning = false;
     }
  }
@@ -230,8 +242,8 @@ void intake_toggle_backward() {
         intake_backward();
         intake_is_spinning = true;
     } else {
-        leftIntake.stop();
-        rightIntake.stop();
+        // leftIntake.stop();
+        // rightIntake.stop();
         intake_is_spinning = false;
     }
 }
@@ -239,36 +251,24 @@ void intake_toggle_backward() {
 bool cylinderOpen = false;
 void cylinderControl() {
     if (!cylinderOpen) {
-        Pneumatics.open();
+        Hook.open();
         cylinderOpen = true;
     } else {
-        Pneumatics.close();
+        Hook.close();
         cylinderOpen = false;
     }
 }
 
-void intake_stop() {
-    leftIntake.stop();
-    rightIntake.stop();
-}
-
 void initialize() {
-    Inertial.calibrate();
-    vexDelay(5000);
-
     leftFront.resetPosition();
     leftMiddle.resetPosition();
+    Hook.close();
+    opticalSensor.setLight(ledState::on);
 }
 
 void macro_actions() {
-    while (1) {
+    while (true) {
         // if (continue_task) {
-        if (Controller.ButtonX.PRESSED) {
-            puncher_move = false;
-            puncher.spinTo(2160, rotationUnits::deg, 100, velocityUnits::pct, true);
-            puncher.setPosition(0, rotationUnits::deg);
-            puncher_move = true;
-        }
         if (Controller.ButtonA.PRESSED) {
             cylinderControl();
         }
@@ -278,7 +278,7 @@ void macro_actions() {
             intake_toggle_backward();
         }
         if (Controller.ButtonB.PRESSED) {
-            while (1) {
+            while (true) {
                 intake(100);
                 if (opticalSensor.hue() < 50 && opticalSensor.isNearObject() && leftIntake.position(deg) > 720) {
                     intake(-100);
