@@ -112,26 +112,33 @@ void usercontrol(void) {
     // task taskOptical2(intakeReverseOptical);
     // task taskDetectRingStatus(detectRingStatus);
     // task taskDetectRingLeave(detectRingLeave);
+    // bool PTO_on = true;
     while (true) {
         if (!intakeReverse) {
             if (getControllerL1() && !getControllerL2() && !intakeStop) {
-                // intake(100);
+                intake(100);
                 intakeReversing = false;
             } else if (getControllerL2() && !getControllerL1() && !intakeStop) {
-                // intake(-100);
+                intake(-100);
                 intakeReversing = true;
             } else if (!getControllerL1() && !getControllerL2()) {
-                // intake(0);
+                intake(0);
             } else {
-                // intake(0);
+                intake(0);
             }
         }
         split_arcade();
+        // if (getControllerButtonY()) {
+        //     expectedRingColor = expectedRingColor == 2 ? 1: 2;
+        //     Controller.Screen.clearLine(4);
+        //     Controller.Screen.setCursor(4, 1);
+        //     Controller.Screen.print("ExpectedColor: %s", expectedRingColor == 2 ? "blue": "red ");
+        // }
+        if (getControllerButtonX()) {
+            Hook.close();
+        }
         if (getControllerButtonY()) {
-            expectedRingColor = expectedRingColor == 2 ? 1: 2;
-            Controller.Screen.clearLine(4);
-            Controller.Screen.setCursor(4, 1);
-            Controller.Screen.print("ExpectedColor: %s", expectedRingColor == 2 ? "blue": "red ");
+            Hook.close();
         }
         vexDelay(10);
     }
