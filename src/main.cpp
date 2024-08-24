@@ -19,40 +19,72 @@ competition Competition;
 void pre_auton() {
 }
 
-void auton_route_test() {
+void auto_route_test() {
     PID_drift(180, 50, 100, 0.5, 0.1);
 }
 
-void auton15sec() {
-    encoderForward(-40, -100);
-    encoderForward(-60, -30);
+void auto15secgoal() {
+    double startTime = Brain.timer(timeUnits::msec);
+    encoderForward(-30, -100);
+    encoderForward(-70, -30);
     Hook.open();
-    encoderForward(-10, -30);
-    PID_forward(15, 0.5, 0.15, 0.8);
+    encoderForward(-15, -40);
+    PID_forward(10, 0.5, 0.15, 1);
     intake(100);
-    PID_turn(-100, 0.75, 0.03);
-    PID_forward(60, 0.5, 0.15, 1);
-    PID_turn(-180, 0.75, 0.02);
-    encoderForward(15, 65);
-    encoderForward(20, 20); // keeps moving slowly when robot is intaking ring
-    vexDelay(1300);
-    PID_forward(-30, 0.5, 0.15, 1);
-    PID_turn(-160, 0.75, 0.02);
-    encoderForward(15, 60);
-    encoderForward(20, 20);
-    vexDelay(300);
-    PID_forward(-40, 0.5, 0.15, 1);
-    PID_turn(0, 0.75, 0.2);
-    PID_forward(85, 0.05, 0.15, 1);
-    PID_turn(90, 0.75, 0.2);
+    PID_turn(-45, 0.75, 0.03);
     Hook.close();
-    encoderForward(50, 70);
-    PID_forward(120, 0.5, 0.15, 0.4);
-    vexDelay(1000);
+    encoderForward(100, 70);
+    PID_forward(30, 0.5, 0.15, 0.4);
+    vexDelay(300);
     intake(0);
-    PID_forward(-50, 0.5, 0.15, 0.6);
+    PID_turn(110, 0.75, 0.02);
+    PID_forward(170, 0.5, 0.15, 1);
+}
+
+void auto15secring2() {
+    encoderForward(-30, -100);
+    encoderForward(-70, -40);
+    Hook.open();
+    encoderForward(-15, -40);
+    PID_forward(10, 0.5, 0.15, 1);
+    intake(100);
+    PID_turn(-90, 0.75, 0.15);
+}
+
+void auto15secring() {
+    double startTime = Brain.timer(timeUnits::msec);
+    encoderForward(-30, -100);
+    encoderForward(-70, -40);
+    Hook.open();
+    encoderForward(-15, -40);
+    PID_forward(10, 0.5, 0.15, 1);
+    intake(100);
+    PID_turn(-90, 0.75, 0.03);
+    PID_forward(60, 0.5, 0.15, 1);
+    PID_turn(-181, 0.75, 0.02);
+    encoderForward(15, 75);
+    PID_forward(27, 0.5, 0.15, 1); // keeps moving slowly when robot is intaking ring
+    vexDelay(300);
+    PID_forward(-25, 0.5, 0.15, 1);
+    PID_turn(-200, 0.75, 0.02);
+    PID_forward(-20, 0.5, 0.15, 1);
+    PID_turn(-161, 0.75, 0.02);
+    encoderForward(8, 70);
+    PID_forward(30, 0.5, 0.15, 1);
+    vexDelay(300);
+    PID_forward(-45, 0.5, 0.15, 1);
+    intake(40);
+    PID_turn(60, 0.75, 0.2);
+    intake(100);
+    PID_forward(160, 0.5, 0.15, 1);
+    Hook.close();
+    PID_forward(30, 0.5, 0.15, 1);
+    PID_forward(-40, 0.5, 0.15, 1);
+    intake(0);
     PID_turn(180, 0.75, 0.02);
-    encoderForward(50, 40);
+    encoderForward(-25, -100);
+    encoderForward(50, 50);
+    logMessage("time: %.0f", Brain.timer(timeUnits::msec) - startTime);
 }
 
 void presetThrowRing() {
@@ -68,8 +100,7 @@ void autonomous(void) {
     // auton15sec();
     switch (route) {
     case 0:
-        vexDelay(5000);
-        auton15sec();
+        auto15secring(); 
         break;
     
     case 1:

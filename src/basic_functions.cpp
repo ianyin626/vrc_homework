@@ -9,7 +9,7 @@ int route = 0;
 bool continue_task = true;
 
 void move(double left_speed, double right_speed) {
-    left_speed *= 120;
+    left_speed *= 120 * 0.95;
     right_speed *= 120;
     leftFront.spin(directionType::fwd, left_speed, voltageUnits::mV);
     leftMiddle.spin(directionType::fwd, left_speed, voltageUnits::mV);
@@ -74,9 +74,9 @@ double getSign(double input) {
 void PID_turn(double target, double error_tolerance, double speed_tolerance) {
     double timer_start = getTimer();
     long delay = 10;
-    double kp = 2;
+    double kp = 2.7;
     double ki = 0.1;
-    double kd = 15.5;
+    double kd = 20;
     double porportional_correction = 0;
     double integral_correction = 0;
     double derivative_correction = 0;
@@ -117,9 +117,9 @@ void PID_turn(double target, double error_tolerance, double speed_tolerance) {
 
 void PID_forward(double target, double error_tolerance, double speed_tolerance, double speedPercentage) {
     long delay = 10;
-    double kp = 3;
-    double ki = 0.1;
-    double kd = 25;
+    double kp = 4.2;
+    double ki = 0.5;
+    double kd = 30;
     double porportional_correction = 0;
     double integral_correction = 0;
     double derivative_correction = 0;
@@ -130,7 +130,7 @@ void PID_forward(double target, double error_tolerance, double speed_tolerance, 
     double past_error = current_error;
     double error_sum = 0;
     double total_correction = 0;
-    double integral_range = 5;
+    double integral_range = 3;
     double motorRate = getMotorRate();
 
     while (fabs(current_error) > error_tolerance || fabs(motorRate) > speed_tolerance) {
@@ -152,7 +152,7 @@ void PID_forward(double target, double error_tolerance, double speed_tolerance, 
 
         move(total_correction * speedPercentage, total_correction * speedPercentage);
         past_error = current_error;
-        // logMessage("%.2f %.2f", current_error, getMotorRate());
+        logMessage("%.2f %.2f", current_error, getMotorRate());
         vexDelay(delay);
         motorRate = getMotorRate();
     }
