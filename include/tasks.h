@@ -11,9 +11,8 @@ extern int expectedRingColor;
 extern bool intakeReverse;
 extern double target;
 extern bool intakeReversing;
+extern bool dropGoal;
 
-int PID_forward_intake();
-int puncher_control();
 int intake_control();
 int opticalControl();
 int intakeReverseOptical();
@@ -24,5 +23,6 @@ int detectRobotStatus();
 int autonRouteSelect();
 int detectRingThrow();
 int detectRingStatusUp();
+int forward_drop_goal();
 
 #endif

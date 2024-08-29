@@ -15,6 +15,7 @@ bool intakeReverse = false;
 int expectedRingColor = 0; // 0 = NAN, 1 = red, 2 = blue
 bool intakeReversing = false;
 int Cabin[3][2] = {{0, 0}, {0, 0}, {0, 0}};
+bool dropGoal = false;
 
 bool get_intake_detected() {
     if (distanceSensor.objectDistance(distanceUnits::mm) < 50) {
@@ -210,6 +211,7 @@ int detectRingThrow() {
 int detectRobotStatus() {
     while (true) {
         Brain.Screen.clearScreen();
+        Controller.Screen.clearLine(4);
         Brain.Screen.printAt(0, 20, "leftFrontTemp: %.0f", leftFront.temperature(temperatureUnits::celsius));
         Brain.Screen.printAt(0, 40, "leftMiddleTemp: %.0f", leftMiddle.temperature(temperatureUnits::celsius));
         Brain.Screen.printAt(0, 60, "leftBackTemp: %.0f", leftBack.temperature(temperatureUnits::celsius));
@@ -223,6 +225,9 @@ int detectRobotStatus() {
 
         Brain.Screen.printAt(0, 140, "leftLiftTemp: %.0f", leftLift.temperature(temperatureUnits::celsius));
         Brain.Screen.printAt(200, 140, "rightLiftTemp: %.0f", rightLift.temperature(temperatureUnits::celsius));
+
+        Controller.Screen.setCursor(4, 1);
+        Controller.Screen.print("rotation: %5.0f_______", Inertial.rotation(rotationUnits::deg));
         vexDelay(500);
     }
     return 0;
@@ -238,6 +243,17 @@ int autonRouteSelect() {
             Controller.Screen.setCursor(4, 1);
             Controller.Screen.print("Route: %d", route + 1);
             logMessage("switch route");
+        }
+        vexDelay(10);
+    }
+    return 0;
+}
+
+int forward_drop_goal() {
+    double startPosition = getPosition();
+    while (true) {
+        if (getPosition() > startPosition + 25) {
+            Hook.close();
         }
         vexDelay(10);
     }
