@@ -249,11 +249,12 @@ int autonRouteSelect() {
     return 0;
 }
 
-int forward_drop_goal() {
-    double startPosition = getPosition();
+int intakeUnjamming() {
     while (true) {
-        if (getPosition() > startPosition + 25) {
-            Hook.close();
+        if (upIntake.current(currentUnits::amp) > 0.7 && fabs(upIntake.velocity(velocityUnits::pct)) < 2) {
+            intake(-100);
+            vexDelay(300);
+            intake(100);
         }
         vexDelay(10);
     }

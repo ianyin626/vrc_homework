@@ -88,7 +88,7 @@ void PID_turn(double target, double error_tolerance, double speed_tolerance) {
     double total_correction = 0;
     double integral_range = 10;
 
-    while(fabs(current_error) > error_tolerance || fabs(getGyroRate()) > speed_tolerance) {
+    while (fabs(current_error) > error_tolerance || fabs(getGyroRate()) > speed_tolerance) {
         current_heading = getInertial();
         current_error = target_heading - current_heading;
 
@@ -207,7 +207,7 @@ void PID_drift(double target_angle, double base_speed, double max_speed, double 
 
 void encoderForward(double target, double speed) {
     double startPosition = getPosition();
-    while(getSign(speed) * target > getSign(speed) * (getPosition() - startPosition)) {
+    while (getSign(speed) * target > getSign(speed) * (getPosition() - startPosition)) {
         move(speed, speed);
         vexDelay(10);
     }

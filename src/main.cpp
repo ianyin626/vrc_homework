@@ -32,7 +32,7 @@ void presetThrowRing() {
 void autonomous(void) {
     switch (route) {
     case 0:
-        auton15goal(); 
+        autoskills();
         break;
     
     case 1:

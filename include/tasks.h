@@ -23,6 +23,5 @@ int detectRobotStatus();
 int autonRouteSelect();
 int detectRingThrow();
 int detectRingStatusUp();
-int forward_drop_goal();
-
+int intakeUnjamming();
 #endif

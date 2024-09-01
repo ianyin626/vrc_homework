@@ -4,15 +4,51 @@
 #include "utilities.h"
 #include "tasks.h"
 
+void autoskills() {
+    task taskUnjamming(intakeUnjamming);
+    double startTime = Brain.timer(timeUnits::msec);
+    intake(100);
+    vexDelay(500);
+    PID_forward(40, 0.5, 0.15, 1);
+    PID_turn(90, 0.75, 0.02);
+    PID_forward(-60, 0.5, 0.15, 0.9);
+    encoderForward(-10, -30);
+    Hook.open();
+    vexDelay(100);
+    PID_forward(10, 0.5, 0.15, 0.6);
+    PID_turn(0, 0.75, 0.02);
+    PID_forward(60, 0.5, 0.15, 1);
+    PID_turn(-85, 0.75, 0.02);
+    PID_forward(60, 0.5, 0.15, 0.7);
+    PID_turn(-25 , 0.75, 0.02);
+    PID_forward(60, 0.5, 0.15, 0.8);
+    vexDelay(800);
+    intake(40);
+    PID_turn(185, 0.75, 0.02);
+    intake(100);
+    PID_forward(97, 0.5, 0.15, 1);
+    vexDelay(600);
+    PID_forward(30, 0.5, 0.15, 1);
+    vexDelay(400);
+    PID_forward(-20, 0.5, 0.15, 1);
+    PID_turn(140, 0.75, 0.02);
+    PID_forward(30, 0.5, 0.15, 1);
+    vexDelay(400);
+    PID_turn(65, 0.75, 0.02);
+    encoderForward(-30, -50);
+    Hook.close();
+    logMessage("time: %.0f", Brain.timer(timeUnits::msec) - startTime);
+}
 
 void auton15goal() {
+    double startTime = Brain.timer(timeUnits::msec);
     PID_forward(-93, 0.5, 0.15, 0.8);
     PID_turn(-40, 0.75, 0.02);
     encoderForward(-13, -20);
     vexDelay(250);
     Hook.open();
-    intake(100);
     PID_turn(20, 0.75, 0.02);
+    intake(100);
     vexDelay(300);
     PID_forward(20, 0.5, 0.15, 0.7);
     Hook.close();
@@ -21,12 +57,29 @@ void auton15goal() {
     intake(0);
     encoderForward(-10, 40);
     PID_turn(90, 0.75, 0.02);
-    encoderForward(-40, -60);
+    encoderForward(-40, -40);
     vexDelay(200);
     Hook.open();
     PID_forward(-7, 0.5, 0.15, 0.7);
-    vexDelay(100);
-    PID_turn(-30, 0.75, 0.02);
+    intake(100);
+    vexDelay(500);
+    PID_turn(-45, 0.75, 0.02);
+    PID_forward(70, 0.5, 0.15, 0.8);
+    vexDelay(300);
+    intake(30);
+    PID_turn(-90, 0.75, 0.02);
+    intake(-100);
+    PID_forward(10, 0.5, 0.15, 1);
+    vexDelay(300);
+    PID_forward(-10, 0.5, 0.15, 1);
+    PID_turn(-55, 0.75, 0.02);
+    intake(100);
+    PID_forward(40, 0.5, 0.15, 0.7);
+    vexDelay(300);
+    PID_turn(-180, 0.75, 0.02);
+    encoderForward(50, 50);
+    Hook.close();
+    logMessage("time: %.0f", Brain.timer(timeUnits::msec) - startTime + leftFront.current(percentUnits::pct));
 }
 
 void auto_route_test() {
