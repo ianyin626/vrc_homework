@@ -215,7 +215,7 @@ void encoderForward(double target, double speed) {
 }
 
 void intake(double volt) {
-    upIntake.spin(directionType::fwd, volt * 95, voltageUnits::mV);
+    upIntake.spin(directionType::fwd, volt * 120, voltageUnits::mV);
     downIntake.spin(directionType::fwd, volt * 120, voltageUnits::mV);
 }
 
