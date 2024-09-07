@@ -7,37 +7,44 @@
 void autoskills() {
     task taskUnjamming(intakeUnjamming);
     double startTime = Brain.timer(timeUnits::msec);
-    intake(100);
-    vexDelay(500);
-    PID_forward(40, 0.5, 0.15, 1);
-    PID_turn(90, 0.75, 0.02);
-    PID_forward(-60, 0.5, 0.15, 0.9);
-    encoderForward(-10, -30);
+    encoderForward(-20, -30);
     Hook.open();
+    intake(100);
     vexDelay(100);
-    PID_forward(10, 0.5, 0.15, 0.6);
     PID_turn(0, 0.75, 0.02);
     PID_forward(60, 0.5, 0.15, 1);
     PID_turn(-85, 0.75, 0.02);
     PID_forward(60, 0.5, 0.15, 0.7);
-    PID_turn(-25 , 0.75, 0.02);
+    PID_turn(-25, 0.75, 0.02);
     PID_forward(60, 0.5, 0.15, 0.8);
     vexDelay(800);
-    intake(40);
-    PID_turn(185, 0.75, 0.02);
-    intake(100);
-    PID_forward(97, 0.5, 0.15, 1);
+    PID_turn(190, 0.75, 0.02);
+    PID_forward(105, 0.5, 0.15, 1);
     vexDelay(600);
-    PID_forward(30, 0.5, 0.15, 1);
-    vexDelay(400);
-    PID_forward(-20, 0.5, 0.15, 1);
+    PID_forward(-30, 0.5, 0.15, 1);
     PID_turn(140, 0.75, 0.02);
-    PID_forward(30, 0.5, 0.15, 1);
+    PID_forward(20, 0.5, 0.15, 1);
     vexDelay(400);
+    PID_turn(180, 0.75, 0.02);
+    PID_forward(30, 0.5, 0.15, 1);
     PID_turn(65, 0.75, 0.02);
     encoderForward(-30, -50);
     Hook.close();
+    encoderForward(30, 100);
+    vexDelay(500);
     logMessage("time: %.0f", Brain.timer(timeUnits::msec) - startTime);
+}
+
+void autohomework() {
+    PID_turn(35, 0.75, 0.02);
+    move(-50, -40);
+    double error = getInertial() - 35;
+    while(fabs(getInertial() - 25) < 10) {
+        error = 2 * (getInertial() - 35);
+        move(-50 - error, -40 + error);
+        vexDelay(10);
+    }
+    move(0, 0);
 }
 
 void auton15goal() {
@@ -83,7 +90,7 @@ void auton15goal() {
 }
 
 void auto_route_test() {
-PID_forward(60, 0.5, 0.15, 1);
+    PID_forward(60, 0.5, 0.15, 1);
 }
 
 void auto15ring() {

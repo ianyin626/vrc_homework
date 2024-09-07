@@ -6,5 +6,6 @@ void auton15goal();
 void auto15ring();
 void auto15ring2(); // not usable
 void autoskills();
+void autohomework();
 
 #endif

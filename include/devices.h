@@ -58,7 +58,7 @@ inline double getPosition() {
 }
 
 inline double getMotorRate() {
-    return leftFront.velocity(velocityUnits::dps) / 36000 * WHEEL_CIRCUMFERENCE_CM * MOTOR_TO_WHEEL_GEAR_RATIO; // cm/s
+    return leftFront.velocity(velocityUnits::dps) / 36000 * WHEEL_CIRCUMFERENCE_CM * MOTOR_TO_WHEEL_GEAR_RATIO; // cm/10ms
 }
 
 inline double getControllerL1() {

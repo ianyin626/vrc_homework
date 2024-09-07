@@ -16,6 +16,8 @@ int expectedRingColor = 0; // 0 = NAN, 1 = red, 2 = blue
 bool intakeReversing = false;
 int Cabin[3][2] = {{0, 0}, {0, 0}, {0, 0}};
 bool dropGoal = false;
+bool FLAG_DETECT_DRIVE_STALL = false;
+bool SIGNAL_DRIVE_STALLED = false;
 
 bool get_intake_detected() {
     if (distanceSensor.objectDistance(distanceUnits::mm) < 50) {
@@ -255,6 +257,19 @@ int intakeUnjamming() {
             intake(-100);
             vexDelay(300);
             intake(100);
+        }
+        vexDelay(10);
+    }
+    return 0;
+}
+
+int detectDriveStall() {
+    while(true) {
+        if (FLAG_DETECT_DRIVE_STALL) {
+            if (leftFront.current(currentUnits::amp) > 2 && fabs(getMotorRate()) < 0.1) {
+                SIGNAL_DRIVE_STALLED = true;
+                logMessage("speed: %.1f", getMotorRate());
+            }
         }
         vexDelay(10);
     }

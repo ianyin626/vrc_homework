@@ -12,6 +12,8 @@ extern bool intakeReverse;
 extern double target;
 extern bool intakeReversing;
 extern bool dropGoal;
+extern bool FLAG_DETECT_DRIVE_STALL;
+extern bool SIGNAL_DRIVE_STALLED;
 
 int intake_control();
 int opticalControl();
@@ -24,4 +26,5 @@ int autonRouteSelect();
 int detectRingThrow();
 int detectRingStatusUp();
 int intakeUnjamming();
+int detectDriveStall();
 #endif
