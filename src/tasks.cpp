@@ -259,3 +259,13 @@ int forward_drop_goal() {
     }
     return 0;
 }
+
+int holdLift() {
+    while(true) {
+        double error = leftLift.position(rotationUnits::deg) - 3600;
+        double kp = 0.3;
+        leftLift.spin(directionType::rev, error * kp, voltageUnits::mV);
+        vexDelay(10);
+    }
+    return 0;
+}
