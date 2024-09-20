@@ -70,7 +70,7 @@ inline double getControllerL2() {
 }
 
 inline double getControllerButtonX() {
-    return Controller.ButtonY.PRESSED;
+    return Controller.ButtonX.PRESSED;
 }
 
 inline double getControllerButtonY() {
@@ -87,6 +87,14 @@ inline double getIntakeForward() {
 
 inline double getControllerButtonUp() {
     return Controller.ButtonUp.PRESSED;
+}
+
+inline double getControllerButtonA() {
+    return Controller.ButtonA.PRESSED;
+}
+
+inline double getControllerButtonB() {
+    return Controller.ButtonB.PRESSED;
 }
 
 #endif

@@ -16,6 +16,7 @@ int expectedRingColor = 0; // 0 = NAN, 1 = red, 2 = blue
 bool intakeReversing = false;
 int Cabin[3][2] = {{0, 0}, {0, 0}, {0, 0}};
 bool dropGoal = false;
+double targetLiftPos = 0;
 
 bool get_intake_detected() {
     if (distanceSensor.objectDistance(distanceUnits::mm) < 50) {
@@ -262,10 +263,20 @@ int forward_drop_goal() {
 
 int holdLift() {
     while(true) {
-        double error = leftLift.position(rotationUnits::deg) - 3600;
-        double kp = 0.3;
+        double error = 615 - leftLift.position(rotationUnits::deg);
+        double kp = 20.6;
         leftLift.spin(directionType::rev, error * kp, voltageUnits::mV);
         vexDelay(10);
     }
     return 0;
 }
+
+// int holdLiftAnyPos() {
+//     leftLift.setPosition(0, rotationUnits::deg);
+//     while(true) {
+//         leftLift.spinTo(targetLiftPos, rotationUnits::deg, 100, velocityUnits::pct, false);
+//         vexDelay(10);
+//         logMessage("%.0f", leftLift.position(rotationUnits::deg));
+//     }
+//     return 0;
+// }

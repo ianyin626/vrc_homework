@@ -269,24 +269,10 @@ void initialize() {
 void macro_actions() {
     while (true) {
         // if (continue_task) {
-        if (Controller.ButtonA.PRESSED) {
-            cylinderControl();
-        }
         if (Controller.ButtonR1.PRESSED) {
             intake_toggle_forward();
         } else if (Controller.ButtonR2.PRESSED) {
             intake_toggle_backward();
-        }
-        if (Controller.ButtonB.PRESSED) {
-            while (true) {
-                intake(100);
-                if (opticalSensor.hue() < 50 && opticalSensor.isNearObject() && upIntake.position(deg) > 720) {
-                    intake(-100);
-                    vexDelay(500);
-                }
-                intake(100);
-                vexDelay(10);
-            }
         }
         // }
         vexDelay(10);

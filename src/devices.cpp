@@ -9,10 +9,10 @@ motor leftBack(PORT6, ratio6_1, true);
 motor rightFront(PORT19, ratio6_1, false);
 motor rightMiddle(PORT2, ratio6_1, false);
 motor rightBack(PORT3, ratio6_1, false);
-motor upIntake(PORT1, ratio6_1, true);
-motor downIntake(PORT18, ratio6_1, false);
+motor upIntake(PORT10, ratio6_1, false);
+motor downIntake(PORT20, ratio6_1, false);
 motor puncher(PORT19, ratio6_1, false); // doesn't exist
-motor leftLift(PORT8, ratio18_1, true);
+motor leftLift(PORT7, ratio18_1, true);
 motor rightLift(PORT9, ratio18_1, false);
 optical opticalSensor(PORT20);
 optical opticalUp(PORT16);

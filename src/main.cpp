@@ -89,6 +89,31 @@ void usercontrol(void) {
                 intake(0);
             }
         }
+        if (getControllerButtonA()) {
+            while(fabs(0 - leftLift.position(rotationUnits::deg)) > 2) {
+                double error = 0 - leftLift.position(rotationUnits::deg);
+                double kp = 3;
+                leftLift.spin(directionType::fwd, error * kp, voltageUnits::volt);
+                vexDelay(10);
+            }
+            leftLift.spin(directionType::fwd, 0, voltageUnits::volt);
+        } else if (getControllerButtonB()) {
+            while(fabs(-100 - leftLift.position(rotationUnits::deg)) > 2) {
+                double error = -100 - leftLift.position(rotationUnits::deg);
+                double kp = 3;
+                leftLift.spin(directionType::fwd, error * kp, voltageUnits::volt);
+                vexDelay(10);
+            }
+            leftLift.spin(directionType::fwd, 0, voltageUnits::volt);
+        } else if (getControllerButtonX()) {
+            while(fabs(-640 - leftLift.position(rotationUnits::deg)) > 2) {
+                double error = -640 - leftLift.position(rotationUnits::deg);
+                double kp = 3;
+                leftLift.spin(directionType::fwd, error * kp, voltageUnits::volt);
+                vexDelay(10);
+            }
+            leftLift.spin(directionType::fwd, 0, voltageUnits::volt);
+        }
         split_arcade();
         if (getControllerButtonY()) {
             expectedRingColor = expectedRingColor == 2 ? 1: 2;
@@ -104,6 +129,8 @@ void usercontrol(void) {
 }
 
 int main() {
+    // task taskholdLift(holdLiftAnyPos);
+    logMessage("hi");
     task taskDetectStatus(detectRobotStatus);
     task taskRouteSelect(autonRouteSelect);
     // task taskDropgoal(forward_drop_goal); // only used once

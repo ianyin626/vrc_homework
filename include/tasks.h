@@ -12,6 +12,7 @@ extern bool intakeReverse;
 extern double target;
 extern bool intakeReversing;
 extern bool dropGoal;
+extern double targetLiftPos;
 
 int intake_control();
 int opticalControl();
@@ -24,5 +25,6 @@ int autonRouteSelect();
 int detectRingThrow();
 int detectRingStatusUp();
 int forward_drop_goal();
-
+int holdLift();
+int holdLiftAnyPos();
 #endif
