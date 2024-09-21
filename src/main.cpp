@@ -46,7 +46,13 @@ void liftTurnToPosition()
 void autonomous(void) {
     switch (route) {
     case 0:
-        auton15goal(); 
+        // auton15goal();
+        // vexDelay(5000);
+        PID_forward(100, 0.5, 0.1, 0.5);
+        // PID_turn(180, 0.75, 0.01);
+        // PID_turn(270, 0.75, 0.01);
+        // PID_turn(360, 0.75, 0.01);
+        // PID_turn(540, 0.75, 0.01);
         break;
     
     case 1:
@@ -131,7 +137,6 @@ void usercontrol(void) {
 
 int main() {
     // task taskholdLift(holdLiftAnyPos);
-    logMessage("hi");
     task taskDetectStatus(detectRobotStatus);
     task taskRouteSelect(autonRouteSelect);
     // task taskDropgoal(forward_drop_goal); // only used once

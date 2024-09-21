@@ -9,7 +9,7 @@ int route = 0;
 bool continue_task = true;
 
 void move(double left_speed, double right_speed) {
-    left_speed *= 120 * 0.95;
+    left_speed *= 120 * 0.9;
     right_speed *= 120;
     leftFront.spin(directionType::fwd, left_speed, voltageUnits::mV);
     leftMiddle.spin(directionType::fwd, left_speed, voltageUnits::mV);
@@ -29,7 +29,7 @@ void split_arcade() {
     if (std::abs(axis1_pos) < dead_band) {
         axis1_pos = 0;
     }
-    move(axis3_pos + axis1_pos, axis3_pos - axis1_pos);
+    move((axis3_pos + axis1_pos), axis3_pos - axis1_pos);
 }
 
 double mod(double input, int base) {
@@ -74,9 +74,9 @@ double getSign(double input) {
 void PID_turn(double target, double error_tolerance, double speed_tolerance) {
     double timer_start = getTimer();
     long delay = 10;
-    double kp = 2.7;
-    double ki = 0.1;
-    double kd = 20;
+    double kp = 2.6;
+    double ki = 0.07;
+    double kd = 18;
     double porportional_correction = 0;
     double integral_correction = 0;
     double derivative_correction = 0;
@@ -104,11 +104,15 @@ void PID_turn(double target, double error_tolerance, double speed_tolerance) {
         integral_correction = error_sum * ki;
         derivative_correction = getGyroRate() * -1 * kd;
         total_correction = porportional_correction + integral_correction + derivative_correction;
+
+        if (fabs(total_correction) < MIN_DRIVE_SPEED && fabs(getGyroRate()) < speed_tolerance) {
+            total_correction = getSign(total_correction) * MIN_DRIVE_SPEED;
+        }
         
         move(total_correction, total_correction * -1);
         past_error = current_error;
         vexDelay(delay);
-        // logMessage("%.2f, %.1f, %.2f", current_error, error_sum, getGyroRate());
+        logMessage("%.2f, %.2f, %.2f, %.2f", current_error, integral_correction, derivative_correction, total_correction);
     }
     move(0, 0);
     double timer_end = getTimer();
@@ -116,8 +120,9 @@ void PID_turn(double target, double error_tolerance, double speed_tolerance) {
 }
 
 void PID_forward(double target, double error_tolerance, double speed_tolerance, double speedPercentage) {
+    double startTime = Brain.timer(timeUnits::msec);
     long delay = 10;
-    double kp = 4.2;
+    double kp = 4.0;
     double ki = 0.5;
     double kd = 30;
     double porportional_correction = 0;
@@ -152,12 +157,12 @@ void PID_forward(double target, double error_tolerance, double speed_tolerance, 
 
         move(total_correction * speedPercentage, total_correction * speedPercentage);
         past_error = current_error;
-        logMessage("%.2f %.2f", current_error, getMotorRate());
+        logMessage("%.2f %.2f %.0f", current_error, getMotorRate(), total_correction);
         vexDelay(delay);
         motorRate = getMotorRate();
     }
     move(0, 0);
-    logMessage("PID forward");
+    logMessage("PID forward %.3f", Brain.timer(timeUnits::msec) - startTime);
 }
 
 void PID_drift(double target_angle, double base_speed, double max_speed, double error_tolerance, double speed_tolerance) {

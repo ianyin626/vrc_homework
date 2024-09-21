@@ -31,13 +31,14 @@ extern pneumatics Arm;
 #define INITIAL_HEADING 0
 #define RING_COLOR_RED 1
 #define RING_COLOR_BLUE 2
+#define MIN_DRIVE_SPEED 20
 
 inline double getInertial() {
     return Inertial.rotation(rotationUnits::deg);
 }
 
 inline double getGyroRate() {
-    return Inertial.gyroRate(zaxis, dps) / 100;
+    return Inertial.gyroRate(zaxis, dps) / 100; // degrees/10 ms
 }
 
 inline int getAxis3() {

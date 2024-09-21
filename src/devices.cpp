@@ -14,6 +14,6 @@ motor roller(PORT2, ratio6_1, false);
 motor lift(PORT7, ratio18_1, false);
 optical opticalSensor(PORT21);
 distance distanceSensor(PORT20); // N/A
-inertial Inertial(PORT13);
+inertial Inertial(PORT9);
 pneumatics mobileGoalHook(Brain.ThreeWirePort.H);
 pneumatics Arm(Brain.ThreeWirePort.D); // N/A

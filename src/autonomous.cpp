@@ -37,7 +37,7 @@ void auto15ring() {
     double startTime = Brain.timer(timeUnits::msec);
     encoderForward(-20, -100);
     encoderForward(-60, -40);
-    mobileGoalHook.open();
+    grabMobileGoal();
     encoderForward(-10, -40);
     PID_forward(7, 0.5, 0.15, 1);
     intake(100);
@@ -67,7 +67,7 @@ void auto15ring() {
     PID_forward(40, 0.6, 0.15, 1);
     PID_turn(180, 0.75, 0.02);
     encoderForward(40, 50);
-    mobileGoalHook.close();
+    dropMobileGoal();
     logMessage("time: %.0f", Brain.timer(timeUnits::msec) - startTime);
 }
 
