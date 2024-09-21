@@ -216,12 +216,12 @@ void encoderForward(double target, double speed) {
 
 void intake(double volt) {
     upIntake.spin(directionType::fwd, volt * 120, voltageUnits::mV);
-    downIntake.spin(directionType::fwd, volt * 120, voltageUnits::mV);
+    roller.spin(directionType::fwd, volt * 120, voltageUnits::mV);
 }
 
 void intake_backward() {
     upIntake.spin(directionType::rev, 12000, voltageUnits::mV);
-    downIntake.spin(directionType::rev, 12000, voltageUnits::mV);
+    roller.spin(directionType::rev, 12000, voltageUnits::mV);
 }
 
 bool intake_is_spinning = false;
@@ -232,7 +232,7 @@ void intake_toggle_forward() {
         intake_is_spinning = true;
     } else {
         // upIntake.stop();
-        // downIntake.stop();
+        // roller.stop();
         intake_is_spinning = false;
     }
  }
@@ -243,7 +243,7 @@ void intake_toggle_backward() {
         intake_is_spinning = true;
     } else {
         // upIntake.stop();
-        // downIntake.stop();
+        // roller.stop();
         intake_is_spinning = false;
     }
 }
@@ -268,13 +268,13 @@ void initialize() {
 
 void macro_actions() {
     while (true) {
-        // if (continue_task) {
-        if (Controller.ButtonR1.PRESSED) {
-            intake_toggle_forward();
-        } else if (Controller.ButtonR2.PRESSED) {
-            intake_toggle_backward();
-        }
+        // // if (continue_task) {
+        // if (Controller.ButtonR1.PRESSED) {
+        //     intake_toggle_forward();
+        // } else if (Controller.ButtonR2.PRESSED) {
+        //     intake_toggle_backward();
         // }
+        // // }
         vexDelay(10);
     }
 }

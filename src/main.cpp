@@ -31,12 +31,13 @@ void presetThrowRing() {
 
 void liftTurnToPosition()
 {
-    double error = 0;
+    double error = targetLiftPosition - lift.position(rotationUnits::deg);
     double kp = 3;
-    while (fabs(lift.position(rotationUnits::deg) - targetLiftPosition) > 2)
+    while (fabs(error) > 2)
     {
-        error = lift.position(rotationUnits::deg) - targetLiftPosition;
         lift.spin(directionType::fwd, error * kp, voltageUnits::volt);
+        error = targetLiftPosition - lift.position(rotationUnits::deg);
+        logMessage("%.0f", lift.position(rotationUnits::deg));
         vexDelay(10);
     }
     lift.spin(directionType::fwd, 0, voltageUnits::volt);
@@ -80,7 +81,7 @@ void autonomous(void) {
 void usercontrol(void) {
     expectedRingColor = RING_COLOR_BLUE;
     Controller.Screen.print("ExpectedColor: %s", expectedRingColor == RING_COLOR_BLUE ? "blue": "red ");
-    mobileGoalHook.open();
+    mobileGoalHook.close();
     // initialize_macros();
     // task taskIntake(intake_control);
     // task taskOptical(opticalControl);
@@ -105,16 +106,16 @@ void usercontrol(void) {
             targetLiftPosition = 100;
             liftTurnToPosition();
         } else if (getControllerButtonX()) {
-            targetLiftPosition = 640;
+            targetLiftPosition = 672;
             // liftTurnToPosition();
             thread liftAction(liftTurnToPosition);
         }
         
         // Mobile goal hook control
         if (getControllerButtonR1()) {
-            mobileGoalHook.open();
+            grabMobileGoal();
         } else if (getControllerButtonR2()) {
-            mobileGoalHook.close();
+            dropMobileGoal();
         }
 
         split_arcade();

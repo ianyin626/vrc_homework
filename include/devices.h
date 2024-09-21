@@ -15,7 +15,7 @@ extern motor rightFront;
 extern motor rightMiddle;
 extern motor rightBack;
 extern motor upIntake;
-extern motor downIntake;
+extern motor roller;
 extern motor lift;
 extern distance distanceSensor;
 extern optical opticalSensor;
@@ -102,6 +102,14 @@ inline double getControllerButtonR1() {
 
 inline double getControllerButtonR2() {
     return Controller.ButtonR2.PRESSED;
+}
+
+inline void grabMobileGoal() {
+    mobileGoalHook.open();
+}
+
+inline void dropMobileGoal() {
+    mobileGoalHook.close();
 }
 
 #endif

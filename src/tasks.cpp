@@ -228,10 +228,10 @@ int detectRobotStatus() {
             upIntake.velocity(velocityUnits::rpm)
         );
         Brain.Screen.printAt(0, 120,
-            "DownIntake: %.0f °C, %.2f V, %.0f RPM",
-            downIntake.temperature(temperatureUnits::celsius),
-            downIntake.voltage(voltageUnits::volt),
-            downIntake.velocity(velocityUnits::rpm)
+            "roller: %.0f °C, %.2f V, %.0f RPM",
+            roller.temperature(temperatureUnits::celsius),
+            roller.voltage(voltageUnits::volt),
+            roller.velocity(velocityUnits::rpm)
         );
 
         Brain.Screen.printAt(0, 140, "liftTemp: %.0f", lift.temperature(temperatureUnits::celsius));
