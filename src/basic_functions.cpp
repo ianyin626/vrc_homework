@@ -251,10 +251,10 @@ void intake_toggle_backward() {
 bool cylinderOpen = false;
 void cylinderControl() {
     if (!cylinderOpen) {
-        Hook.open();
+        mobileGoalHook.open();
         cylinderOpen = true;
     } else {
-        Hook.close();
+        mobileGoalHook.close();
         cylinderOpen = false;
     }
 }
@@ -262,7 +262,7 @@ void cylinderControl() {
 void initialize() {
     leftFront.resetPosition();
     leftMiddle.resetPosition();
-    Hook.close();
+    mobileGoalHook.close();
     opticalSensor.setLight(ledState::on);
 }
 

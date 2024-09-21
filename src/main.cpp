@@ -24,9 +24,22 @@ void presetThrowRing() {
     initialize();
     task taskDetectRingStatus(detectRingStatusUp);
     task taskDetectRingLeave(detectRingThrow);
-    Hook.open();
+    mobileGoalHook.open();
     expectedRingColor = 2;
     intake(100);
+}
+
+void liftTurnToPosition()
+{
+    double error = 0;
+    double kp = 3;
+    while (fabs(lift.position(rotationUnits::deg) - targetLiftPosition) > 2)
+    {
+        error = lift.position(rotationUnits::deg) - targetLiftPosition;
+        lift.spin(directionType::fwd, error * kp, voltageUnits::volt);
+        vexDelay(10);
+    }
+    lift.spin(directionType::fwd, 0, voltageUnits::volt);
 }
 
 void autonomous(void) {
@@ -36,7 +49,7 @@ void autonomous(void) {
         break;
     
     case 1:
-        Hook.open();
+        mobileGoalHook.open();
         presetThrowRing();
         break;
     
@@ -65,66 +78,53 @@ void autonomous(void) {
 }
 
 void usercontrol(void) {
-    expectedRingColor = 2;
-    Controller.Screen.print("ExpectedColor: %s", expectedRingColor == 2 ? "blue": "red ");
-    Hook.open();
+    expectedRingColor = RING_COLOR_BLUE;
+    Controller.Screen.print("ExpectedColor: %s", expectedRingColor == RING_COLOR_BLUE ? "blue": "red ");
+    mobileGoalHook.open();
     // initialize_macros();
-    target = 1440;
     // task taskIntake(intake_control);
     // task taskOptical(opticalControl);
     // task taskOptical2(intakeReverseOptical);
     // task taskDetectRingStatus(detectRingStatus);
     // task taskDetectRingLeave(detectRingLeave);
     while (true) {
-        if (!intakeReverse) {
-            if (getControllerL1() && !getControllerL2() && !intakeStop) {
-                intake(100);
-                intakeReversing = false;
-            } else if (getControllerL2() && !getControllerL1() && !intakeStop) {
-                intake(-100);
-                intakeReversing = true;
-            } else if (!getControllerL1() && !getControllerL2()) {
-                intake(0);
-            } else {
-                intake(0);
-            }
+        // Intake(both) control
+        if (getControllerL1() && !getControllerL2()) {
+            intake(100);
+        } else if (!getControllerL1() && getControllerL2()) {
+            intake(-100);
+        } else {
+            intake(0);
         }
+
+        // Lift control: A - Reset, B - Alliance Stake, X - Wall Stake
         if (getControllerButtonA()) {
-            while(fabs(0 - leftLift.position(rotationUnits::deg)) > 2) {
-                double error = 0 - leftLift.position(rotationUnits::deg);
-                double kp = 3;
-                leftLift.spin(directionType::fwd, error * kp, voltageUnits::volt);
-                vexDelay(10);
-            }
-            leftLift.spin(directionType::fwd, 0, voltageUnits::volt);
+            targetLiftPosition = 0;
+            liftTurnToPosition();
         } else if (getControllerButtonB()) {
-            while(fabs(-100 - leftLift.position(rotationUnits::deg)) > 2) {
-                double error = -100 - leftLift.position(rotationUnits::deg);
-                double kp = 3;
-                leftLift.spin(directionType::fwd, error * kp, voltageUnits::volt);
-                vexDelay(10);
-            }
-            leftLift.spin(directionType::fwd, 0, voltageUnits::volt);
+            targetLiftPosition = 100;
+            liftTurnToPosition();
         } else if (getControllerButtonX()) {
-            while(fabs(-640 - leftLift.position(rotationUnits::deg)) > 2) {
-                double error = -640 - leftLift.position(rotationUnits::deg);
-                double kp = 3;
-                leftLift.spin(directionType::fwd, error * kp, voltageUnits::volt);
-                vexDelay(10);
-            }
-            leftLift.spin(directionType::fwd, 0, voltageUnits::volt);
+            targetLiftPosition = 640;
+            // liftTurnToPosition();
+            thread liftAction(liftTurnToPosition);
         }
+        
+        // Mobile goal hook control
+        if (getControllerButtonR1()) {
+            mobileGoalHook.open();
+        } else if (getControllerButtonR2()) {
+            mobileGoalHook.close();
+        }
+
         split_arcade();
+
+        // Switch expected ring color
         if (getControllerButtonY()) {
-            expectedRingColor = expectedRingColor == 2 ? 1: 2;
-            Controller.Screen.clearLine(4);
-            Controller.Screen.setCursor(4, 1);
-            Controller.Screen.print("ExpectedColor: %s", expectedRingColor == 2 ? "blue": "red ");
+            expectedRingColor = expectedRingColor == RING_COLOR_BLUE ? RING_COLOR_RED: RING_COLOR_BLUE;
         }
+
         vexDelay(10);
-    }
-    if (getControllerButtonX()) {
-        Hook.open();
     }
 }
 

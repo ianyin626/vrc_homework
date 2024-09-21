@@ -10,12 +10,12 @@ void auton15goal() {
     PID_turn(-40, 0.75, 0.02);
     encoderForward(-13, -20);
     vexDelay(250);
-    Hook.open();
+    mobileGoalHook.open();
     intake(100);
     PID_turn(20, 0.75, 0.02);
     vexDelay(300);
     PID_forward(20, 0.5, 0.15, 0.7);
-    Hook.close();
+    mobileGoalHook.close();
     PID_forward(30, 0.5, 0.15, 0.8);
     vexDelay(300);
     intake(0);
@@ -23,7 +23,7 @@ void auton15goal() {
     PID_turn(90, 0.75, 0.02);
     encoderForward(-40, -60);
     vexDelay(200);
-    Hook.open();
+    mobileGoalHook.open();
     PID_forward(-7, 0.5, 0.15, 0.7);
     vexDelay(100);
     PID_turn(-30, 0.75, 0.02);
@@ -37,7 +37,7 @@ void auto15ring() {
     double startTime = Brain.timer(timeUnits::msec);
     encoderForward(-20, -100);
     encoderForward(-60, -40);
-    Hook.open();
+    mobileGoalHook.open();
     encoderForward(-10, -40);
     PID_forward(7, 0.5, 0.15, 1);
     intake(100);
@@ -67,7 +67,7 @@ void auto15ring() {
     PID_forward(40, 0.6, 0.15, 1);
     PID_turn(180, 0.75, 0.02);
     encoderForward(40, 50);
-    Hook.close();
+    mobileGoalHook.close();
     logMessage("time: %.0f", Brain.timer(timeUnits::msec) - startTime);
 }
 
@@ -75,7 +75,7 @@ void auto15ring2() { // not usable
     double startTime = Brain.timer(timeUnits::msec);
     encoderForward(-30, -100);
     encoderForward(-70, -40);
-    Hook.open();
+    mobileGoalHook.open();
     encoderForward(-15, -40);
     PID_forward(10, 0.5, 0.15, 1);
     intake(100);
@@ -97,7 +97,7 @@ void auto15ring2() { // not usable
     PID_turn(60, 0.75, 0.2);
     intake(100);
     PID_forward(160, 0.5, 0.15, 1);
-    Hook.close();
+    mobileGoalHook.close();
     PID_forward(30, 0.5, 0.15, 1);
     PID_forward(-40, 0.5, 0.15, 1);
     intake(0);

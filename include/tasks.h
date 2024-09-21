@@ -12,7 +12,7 @@ extern bool intakeReverse;
 extern double target;
 extern bool intakeReversing;
 extern bool dropGoal;
-extern double targetLiftPos;
+extern double targetLiftPosition;
 
 int intake_control();
 int opticalControl();

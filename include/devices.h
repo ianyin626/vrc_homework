@@ -16,14 +16,11 @@ extern motor rightMiddle;
 extern motor rightBack;
 extern motor upIntake;
 extern motor downIntake;
-extern motor puncher;
-extern motor leftLift;
-extern motor rightLift;
+extern motor lift;
 extern distance distanceSensor;
 extern optical opticalSensor;
-extern optical opticalUp;
 extern inertial Inertial;
-extern pneumatics Hook;
+extern pneumatics mobileGoalHook;
 extern pneumatics Arm;
 
 #define DEBUG_MODE 1
@@ -32,6 +29,8 @@ extern pneumatics Arm;
 #define WHEEL_CIRCUMFERENCE_CM WHEEL_DIAMETER_IN * 2.54 * PI
 #define MOTOR_TO_WHEEL_GEAR_RATIO 0.75
 #define INITIAL_HEADING 0
+#define RING_COLOR_RED 1
+#define RING_COLOR_BLUE 2
 
 inline double getInertial() {
     return Inertial.rotation(rotationUnits::deg);
@@ -61,11 +60,11 @@ inline double getMotorRate() {
     return leftFront.velocity(velocityUnits::dps) / 36000 * WHEEL_CIRCUMFERENCE_CM * MOTOR_TO_WHEEL_GEAR_RATIO; // cm/s
 }
 
-inline double getControllerL1() {
+inline bool getControllerL1() {
     return Controller.ButtonL1.pressing();
 }
 
-inline double getControllerL2() {
+inline bool getControllerL2() {
     return Controller.ButtonL2.pressing();
 }
 
@@ -95,6 +94,14 @@ inline double getControllerButtonA() {
 
 inline double getControllerButtonB() {
     return Controller.ButtonB.PRESSED;
+}
+
+inline double getControllerButtonR1() {
+    return Controller.ButtonR1.PRESSED;
+}
+
+inline double getControllerButtonR2() {
+    return Controller.ButtonR2.PRESSED;
 }
 
 #endif
