@@ -16,7 +16,7 @@ int expectedRingColor = 0; // 0 = NAN, 1 = red, 2 = blue
 bool intakeReversing = false;
 int Cabin[3][2] = {{0, 0}, {0, 0}, {0, 0}};
 bool dropGoal = false;
-double targetLiftPos = 0;
+double targetLiftPosition = 0;
 
 bool get_intake_detected() {
     if (distanceSensor.objectDistance(distanceUnits::mm) < 50) {
@@ -213,6 +213,7 @@ int detectRobotStatus() {
     while (true) {
         Brain.Screen.clearScreen();
         Controller.Screen.clearLine(4);
+
         Brain.Screen.printAt(0, 20, "leftFrontTemp: %.0f", leftFront.temperature(temperatureUnits::celsius));
         Brain.Screen.printAt(0, 40, "leftMiddleTemp: %.0f", leftMiddle.temperature(temperatureUnits::celsius));
         Brain.Screen.printAt(0, 60, "leftBackTemp: %.0f", leftBack.temperature(temperatureUnits::celsius));
@@ -220,15 +221,23 @@ int detectRobotStatus() {
         Brain.Screen.printAt(200, 40, "rightMiddle: %.0f", rightMiddle.temperature(temperatureUnits::celsius));
         Brain.Screen.printAt(200, 60, "rightBack: %.0f", rightBack.temperature(temperatureUnits::celsius));
 
-        Brain.Screen.printAt(0, 100, "IntakeTemp: %.0f", upIntake.temperature(temperatureUnits::celsius));
-        Brain.Screen.printAt(200, 100, "IntakeVoltage: %.0f", upIntake.voltage(voltageUnits::mV));
-        Brain.Screen.printAt(0, 120, "IntakeRPM: %.0f", upIntake.velocity(velocityUnits::rpm));
+        Brain.Screen.printAt(0, 100,
+            "UpIntake: %.0f °C, %.2f V, %.0f RPM",
+            upIntake.temperature(temperatureUnits::celsius),
+            upIntake.voltage(voltageUnits::volt),
+            upIntake.velocity(velocityUnits::rpm)
+        );
+        Brain.Screen.printAt(0, 120,
+            "DownIntake: %.0f °C, %.2f V, %.0f RPM",
+            downIntake.temperature(temperatureUnits::celsius),
+            downIntake.voltage(voltageUnits::volt),
+            downIntake.velocity(velocityUnits::rpm)
+        );
 
-        Brain.Screen.printAt(0, 140, "leftLiftTemp: %.0f", leftLift.temperature(temperatureUnits::celsius));
-        Brain.Screen.printAt(200, 140, "rightLiftTemp: %.0f", rightLift.temperature(temperatureUnits::celsius));
+        Brain.Screen.printAt(0, 140, "liftTemp: %.0f", lift.temperature(temperatureUnits::celsius));
 
         Controller.Screen.setCursor(4, 1);
-        Controller.Screen.print("rotation: %5.0f_______", Inertial.rotation(rotationUnits::deg));
+        Controller.Screen.print("Rotation: %5.0f, Expected: %s", Inertial.rotation(rotationUnits::deg), expectedRingColor == RING_COLOR_BLUE ? "Blue": "Red");
         vexDelay(500);
     }
     return 0;
@@ -254,7 +263,7 @@ int forward_drop_goal() {
     double startPosition = getPosition();
     while (true) {
         if (getPosition() > startPosition + 25) {
-            Hook.close();
+            mobileGoalHook.close();
         }
         vexDelay(10);
     }
@@ -263,9 +272,9 @@ int forward_drop_goal() {
 
 int holdLift() {
     while(true) {
-        double error = 615 - leftLift.position(rotationUnits::deg);
+        double error = 615 - lift.position(rotationUnits::deg);
         double kp = 20.6;
-        leftLift.spin(directionType::rev, error * kp, voltageUnits::mV);
+        lift.spin(directionType::rev, error * kp, voltageUnits::mV);
         vexDelay(10);
     }
     return 0;
