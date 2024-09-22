@@ -48,7 +48,7 @@ void autonomous(void) {
     case 0:
         // auton15goal();
         // vexDelay(5000);
-        PID_forward(100, 0.5, 0.1, 0.5);
+        PID_forward(200, 0.5, 0.1, 0.5);
         // PID_turn(180, 0.75, 0.01);
         // PID_turn(270, 0.75, 0.01);
         // PID_turn(360, 0.75, 0.01);

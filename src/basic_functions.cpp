@@ -9,7 +9,7 @@ int route = 0;
 bool continue_task = true;
 
 void move(double left_speed, double right_speed) {
-    left_speed *= 120 * 0.9;
+    left_speed *= 120 * 1.0;
     right_speed *= 120;
     leftFront.spin(directionType::fwd, left_speed, voltageUnits::mV);
     leftMiddle.spin(directionType::fwd, left_speed, voltageUnits::mV);
