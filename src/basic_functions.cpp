@@ -9,8 +9,8 @@ int route = 0;
 bool continue_task = true;
 
 void move(double left_speed, double right_speed) {
-    left_speed *= 120 * 1.0;
-    right_speed *= 120;
+    left_speed *= 120;
+    right_speed *= 120 * 0.8;
     leftFront.spin(directionType::fwd, left_speed, voltageUnits::mV);
     leftMiddle.spin(directionType::fwd, left_speed, voltageUnits::mV);
     leftBack.spin(directionType::fwd, left_speed, voltageUnits::mV);
@@ -128,7 +128,7 @@ void PID_forward(double target, double error_tolerance, double speed_tolerance, 
     double porportional_correction = 0;
     double integral_correction = 0;
     double derivative_correction = 0;
-    leftFront.setPosition(0, rotationUnits::deg);
+    rightFront.setPosition(0, rotationUnits::deg);
     double current_position = getPosition();
     double target_distance = target;
     double current_error = target_distance - current_position;
@@ -157,11 +157,10 @@ void PID_forward(double target, double error_tolerance, double speed_tolerance, 
 
         move(total_correction * speedPercentage, total_correction * speedPercentage);
         past_error = current_error;
-        logMessage("%.2f %.2f %.0f", current_error, getMotorRate(), total_correction);
+        // logMessage("%.2f %.2f %.0f", current_error, getMotorRate(), total_correction);
         vexDelay(delay);
         motorRate = getMotorRate();
     }
-    move(0, 0);
     logMessage("PID forward %.3f", Brain.timer(timeUnits::msec) - startTime);
 }
 
@@ -216,11 +215,17 @@ void encoderForward(double target, double speed) {
         move(speed, speed);
         vexDelay(10);
     }
+    logMessage("W(%.0f+%.0f+%.0f)/(%.0f+%.0f+%.0f)", leftFront.position(rotationUnits::deg), 
+    leftMiddle.position(rotationUnits::deg), 
+    leftBack.position(rotationUnits::deg), 
+    rightFront.position(rotationUnits::deg), 
+    rightMiddle.position(rotationUnits::deg), 
+    rightBack.position(rotationUnits::deg));
     move(0, 0);
 }
 
 void intake(double volt) {
-    upIntake.spin(directionType::fwd, volt * 120, voltageUnits::mV);
+    upIntake.spin(directionType::fwd, volt * 100, voltageUnits::mV);
     roller.spin(directionType::fwd, volt * 120, voltageUnits::mV);
 }
 

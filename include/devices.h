@@ -54,7 +54,7 @@ inline double getTimer() {
 }
 
 inline double getPosition() {
-    return leftFront.position(rotationUnits::rev) * WHEEL_CIRCUMFERENCE_CM * MOTOR_TO_WHEEL_GEAR_RATIO;
+    return rightFront.position(rotationUnits::rev) * WHEEL_CIRCUMFERENCE_CM * MOTOR_TO_WHEEL_GEAR_RATIO;
 }
 
 inline double getMotorRate() {

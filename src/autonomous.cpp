@@ -106,3 +106,47 @@ void auto15ring2() { // not usable
     encoderForward(50, 50);
     logMessage("time: %.0f", Brain.timer(timeUnits::msec) - startTime);
 }
+
+void autoskills() {
+    dropMobileGoal();
+    double startTime = Brain.timer(timeUnits::msec);
+    intake(100);
+    vexDelay(500);
+    lift.spinTo(-100, rotationUnits::deg, -100, velocityUnits::pct, false);
+    intake(0);
+    PID_forward(40, 0.5, 0.1, 1);
+    PID_turn(93, 0.75, 0.02);
+    PID_forward(-35, 0.5, 0.1, 1);
+    encoderForward(-15, -40);
+    grabMobileGoal();
+    vexDelay(500);
+    PID_forward(10, 0.5, 0.1, 1);
+    PID_turn(0, 0.75, 0.02);
+    intake(100);
+    PID_forward(60, 0.5, 0.15, 1);
+    PID_turn(50, 0.75, 0.02);
+    intake(0);
+    PID_forward(45, 0.5, 0.15, 1);
+    intake(100);
+    PID_forward(40, 0.5, 0.1, 0.7);
+    vexDelay(500);
+    PID_forward(-85, 0.5, 0.1, 0.7);
+    PID_turn(-93, 0.75, 0.02);
+    PID_forward(70, 0.5, 0.1, 0.8);
+    vexDelay(800);
+    PID_turn(190, 0.75, 0.02);
+    PID_forward(50, 0.5, 0.1, 1);
+    vexDelay(600);
+    PID_forward(-30, 0.5, 0.1, 1);
+    PID_turn(150, 0.75, 0.02);
+    PID_forward(20, 0.5, 0.1, 1);
+    vexDelay(400);
+    PID_turn(180, 0.75, 0.02);
+    PID_forward(30, 0.5, 0.1, 1);
+    PID_turn(65, 0.75, 0.02);
+    encoderForward(-30, -50);
+    mobileGoalHook.close();
+    encoderForward(30, 100);
+    vexDelay(500);
+    logMessage("time: %.0f", Brain.timer(timeUnits::msec) - startTime);
+}

@@ -46,13 +46,21 @@ void liftTurnToPosition()
 void autonomous(void) {
     switch (route) {
     case 0:
-        // auton15goal();
-        // vexDelay(5000);
-        PID_forward(200, 0.5, 0.1, 0.5);
-        // PID_turn(180, 0.75, 0.01);
-        // PID_turn(270, 0.75, 0.01);
-        // PID_turn(360, 0.75, 0.01);
-        // PID_turn(540, 0.75, 0.01);
+        // autoskills();
+        // leftFront.resetPosition();
+        leftMiddle.resetPosition();
+        leftBack.resetPosition();
+        rightFront.resetPosition();
+        rightMiddle.resetPosition();
+        rightBack.resetPosition();
+        encoderForward(150, 40);
+        vexDelay(1000);
+        logMessage("SKIBIDI TOILET(%.0f+%.0f+%.0f)/(%.0f+%.0f+%.0f)", leftFront.position(rotationUnits::deg), 
+        leftMiddle.position(rotationUnits::deg), 
+        leftBack.position(rotationUnits::deg), 
+        rightFront.position(rotationUnits::deg), 
+        rightMiddle.position(rotationUnits::deg), 
+        rightBack.position(rotationUnits::deg));
         break;
     
     case 1:
