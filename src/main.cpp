@@ -47,7 +47,8 @@ void autonomous(void) {
     switch (route) {
     case 0:
         // autoskills();
-        // leftFront.resetPosition();
+        leftFront.resetPosition();
+        vexDelay(5000);
         leftMiddle.resetPosition();
         leftBack.resetPosition();
         rightFront.resetPosition();
@@ -120,7 +121,7 @@ void usercontrol(void) {
             targetLiftPosition = 100;
             liftTurnToPosition();
         } else if (getControllerButtonX()) {
-            targetLiftPosition = 672;
+            targetLiftPosition = 680;
             // liftTurnToPosition();
             thread liftAction(liftTurnToPosition);
         }

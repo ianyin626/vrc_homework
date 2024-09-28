@@ -10,7 +10,7 @@ bool continue_task = true;
 
 void move(double left_speed, double right_speed) {
     left_speed *= 120;
-    right_speed *= 120 * 0.8;
+    right_speed *= 120;
     leftFront.spin(directionType::fwd, left_speed, voltageUnits::mV);
     leftMiddle.spin(directionType::fwd, left_speed, voltageUnits::mV);
     leftBack.spin(directionType::fwd, left_speed, voltageUnits::mV);
@@ -21,8 +21,8 @@ void move(double left_speed, double right_speed) {
 
 void split_arcade() {
     int32_t dead_band = 5;
-    int32_t axis3_pos = getAxis3();
-    int32_t axis1_pos = getAxis1();
+    int32_t axis3_pos = getAxis3() * 0.8;
+    int32_t axis1_pos = getAxis1() * 0.8;
     if (std::abs(axis3_pos) < dead_band) {
         axis3_pos = 0;
     }
