@@ -65,16 +65,14 @@ void presetThrowRing() {
 }
 
 void autonomous(void) {
-    // auton15sec();
     switch (route) {
     case 0:
         vexDelay(5000);
-        auton15sec();
+        PID_turn(90, 0.1, 0.02);
         break;
     
     case 1:
         Hook.open();
-        presetThrowRing();
         break;
     
     case 2:
@@ -105,35 +103,9 @@ void usercontrol(void) {
     expectedRingColor = 2;
     Controller.Screen.print("ExpectedColor: %s", expectedRingColor == 2 ? "blue": "red ");
     Hook.open();
-    // initialize_macros();
-    target = 1440;
-    // task taskIntake(intake_control);
-    // task taskOptical(opticalControl);
-    // task taskOptical2(intakeReverseOptical);
-    // task taskDetectRingStatus(detectRingStatus);
-    // task taskDetectRingLeave(detectRingLeave);
-    // bool PTO_on = true;
+    initialize_macros();
     while (true) {
-        if (!intakeReverse) {
-            if (getControllerL1() && !getControllerL2() && !intakeStop) {
-                intake(100);
-                intakeReversing = false;
-            } else if (getControllerL2() && !getControllerL1() && !intakeStop) {
-                intake(-100);
-                intakeReversing = true;
-            } else if (!getControllerL1() && !getControllerL2()) {
-                intake(0);
-            } else {
-                intake(0);
-            }
-        }
         split_arcade();
-        // if (getControllerButtonY()) {
-        //     expectedRingColor = expectedRingColor == 2 ? 1: 2;
-        //     Controller.Screen.clearLine(4);
-        //     Controller.Screen.setCursor(4, 1);
-        //     Controller.Screen.print("ExpectedColor: %s", expectedRingColor == 2 ? "blue": "red ");
-        // }
         if (getControllerButtonX()) {
             Hook.close();
         }

@@ -72,6 +72,7 @@ double getSign(double input) {
 }
 
 void PID_turn(double target, double error_tolerance, double speed_tolerance) {
+    logMessage("HELLOS");
     double timer_start = getTimer();
     long delay = 10;
     double kp = 2;
@@ -108,7 +109,7 @@ void PID_turn(double target, double error_tolerance, double speed_tolerance) {
         move(total_correction, total_correction * -1);
         past_error = current_error;
         vexDelay(delay);
-        // logMessage("%.2f, %.1f, %.2f", current_error, error_sum, getGyroRate());
+        logMessage("%.2f, %.1f, %.2f", current_error, error_sum, getGyroRate());
     }
     move(0, 0);
     double timer_end = getTimer();
@@ -211,6 +212,12 @@ void encoderForward(double target, double speed) {
         move(speed, speed);
         vexDelay(10);
     }
+    logMessage("(%.0f+%.0f+%.0f)/(%.0f+%.0f+%.0f)", leftFront.position(rotationUnits::deg), 
+        leftMiddle.position(rotationUnits::deg), 
+        leftBack.position(rotationUnits::deg), 
+        rightFront.position(rotationUnits::deg), 
+        rightMiddle.position(rotationUnits::deg), 
+        rightBack.position(rotationUnits::deg));
     move(0, 0);
 }
 
@@ -231,8 +238,8 @@ void intake_toggle_forward() {
         intake(100);
         intake_is_spinning = true;
     } else {
-        // upIntake.stop();
-        // downIntake.stop();
+        upIntake.stop();
+        downIntake.stop();
         intake_is_spinning = false;
     }
  }
@@ -242,8 +249,8 @@ void intake_toggle_backward() {
         intake_backward();
         intake_is_spinning = true;
     } else {
-        // upIntake.stop();
-        // downIntake.stop();
+        upIntake.stop();
+        downIntake.stop();
         intake_is_spinning = false;
     }
 }
@@ -268,14 +275,22 @@ void initialize() {
 
 void macro_actions() {
     while (true) {
-        // if (continue_task) {
-        if (Controller.ButtonA.PRESSED) {
-            cylinderControl();
+        // // if (continue_task) {
+        // if (Controller.ButtonA.PRESSED) {
+        //     cylinderControl();
+        // }
+        if (Controller.ButtonL1.PRESSED) {
+            intake_toggle_forward();
+        } else if (Controller.ButtonL2.PRESSED) {
+            intake_toggle_backward();
         }
         if (Controller.ButtonR1.PRESSED) {
-            intake_toggle_forward();
+            Hook.close();
         } else if (Controller.ButtonR2.PRESSED) {
-            intake_toggle_backward();
+            Hook.open();
+        }
+        if (Controller.ButtonUp.PRESSED) {
+            intake(0);
         }
         if (Controller.ButtonB.PRESSED) {
             while (true) {
