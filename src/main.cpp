@@ -68,7 +68,7 @@ void autonomous(void) {
     switch (route) {
     case 0:
         vexDelay(5000);
-        PID_turn(90, 0.1, 0.02);
+        encoderForward(100, 100);
         break;
     
     case 1:
@@ -120,6 +120,12 @@ void usercontrol(void) {
 }
 
 int main() {
+    leftFront.resetPosition();
+    leftMiddle.resetPosition();
+    leftBack.resetPosition();
+    rightFront.resetPosition();
+    rightMiddle.resetPosition();
+    rightBack.resetPosition();
     task taskDetectStatus(detectRobotStatus);
     task taskRouteSelect(autonRouteSelect);
     Competition.autonomous(autonomous);

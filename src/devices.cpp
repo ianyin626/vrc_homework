@@ -7,7 +7,7 @@ motor leftFront(PORT7, ratio6_1, true);
 motor leftMiddle(PORT3, ratio6_1, true);
 motor leftBack(PORT16, ratio6_1, false);
 motor rightFront(PORT15, ratio6_1, false);
-motor rightMiddle(PORT12, ratio6_1, false);
+motor rightMiddle(PORT20, ratio6_1, false);
 motor rightBack(PORT18, ratio6_1, true);
 motor upIntake(PORT13, ratio6_1, true);
 motor downIntake(PORT21, ratio6_1, false);
