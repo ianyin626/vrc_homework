@@ -229,6 +229,14 @@ void intake(double volt) {
     roller.spin(directionType::fwd, volt * 120, voltageUnits::mV);
 }
 
+void spin_roller(double volt) {
+    roller.spin(directionType::fwd, volt * 120, voltageUnits::mV);
+}
+
+void spin_hook(double volt) {
+    upIntake.spin(directionType::fwd, volt * 120, voltageUnits::mV);
+}
+
 void intake_backward() {
     upIntake.spin(directionType::rev, 12000, voltageUnits::mV);
     roller.spin(directionType::rev, 12000, voltageUnits::mV);

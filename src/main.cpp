@@ -46,22 +46,13 @@ void liftTurnToPosition()
 void autonomous(void) {
     switch (route) {
     case 0:
-        // autoskills();
         leftFront.resetPosition();
-        vexDelay(5000);
         leftMiddle.resetPosition();
         leftBack.resetPosition();
         rightFront.resetPosition();
         rightMiddle.resetPosition();
         rightBack.resetPosition();
-        encoderForward(150, 40);
-        vexDelay(1000);
-        logMessage("SKIBIDI TOILET(%.0f+%.0f+%.0f)/(%.0f+%.0f+%.0f)", leftFront.position(rotationUnits::deg), 
-        leftMiddle.position(rotationUnits::deg), 
-        leftBack.position(rotationUnits::deg), 
-        rightFront.position(rotationUnits::deg), 
-        rightMiddle.position(rotationUnits::deg), 
-        rightBack.position(rotationUnits::deg));
+        autoSkills();
         break;
     
     case 1:
