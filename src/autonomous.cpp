@@ -109,6 +109,7 @@ void auto15ring2() { // not usable
 }
 
 void firstQuarterSkills() {
+    logMessage("First Part");
     dropMobileGoal();
     lift.spinTo(100, rotationUnits::deg, 100, velocityUnits::pct, true);
     double startTime = Brain.timer(timeUnits::msec);
@@ -121,27 +122,30 @@ void firstQuarterSkills() {
     encoderForward(-13, -40);
     grabMobileGoal();
     vexDelay(500);
-    PID_turn(0, 0.75, 0.02);
+    PID_turn(3, 0.75, 0.02);
     spin_roller(100);
     PID_forward(55, 0.5, 0.5, 0.5);
-    PID_turn(-90, 0.75, 0.02);
+    PID_turn(-87, 0.75, 0.02);
     vexDelay(250);
     PID_forward(55, 0.5, 0.1, 0.7);
     vexDelay(500);
     PID_turn(-175, 0.75, 0.02);
     PID_forward(50, 0.5, 0.1, 1);
     vexDelay(500);
-    PID_forward(35, 0.5, 0.1, 1);
-    vexDelay(250);
-    PID_turn(-35, 0.75, 0.02);
     PID_forward(30, 0.5, 0.1, 1);
+    vexDelay(750);
+    PID_forward(-63, 0.5, 0.1, 1);
+    PID_turn(-130, 0.75, 0.02);
+    PID_forward(40, 0.5, 0.1, 1);
+    vexDelay(1000);
     PID_turn(20, 0.75, 0.02);
-    PID_forward(-30, 0.5, 0.1, 1);
-    vexDelay(250);
     mobileGoalHook.close();
+    move(-60, -60);
+    vexDelay(1000);
+    move(0, 0);
     PID_forward(35, 0.5, 0.1, 1);
-    PID_turn(0, 0.75, 0.02);
-    PID_forward(113, 0.5, 0.1, 1);
+    PID_turn(2, 0.75, 0.02);
+    PID_forward(115, 0.5, 0.1, 1);
     spin_hook(0);
     PID_turn(90, 0.75, 0.02);
     move(-50, -50);
@@ -149,14 +153,17 @@ void firstQuarterSkills() {
     move(0, 0);
     lift.spinTo(680, rotationUnits::deg, 100, velocityUnits::pct, true);
     spin_hook(85); // 85 is the speed to make sure the rings dont fly out
+    vexDelay(1000);
+    lift.spinTo(0, rotationUnits::deg, -100, velocityUnits::pct, true);
     logMessage("time: %.0f", Brain.timer(timeUnits::msec) - startTime);
 }
 
 void secondQuarterSkills() {
-    logMessage("HI");
+    logMessage("Second Part");
 }
 
 void autoSkills() {
+    lift.resetPosition();
     firstQuarterSkills();
     secondQuarterSkills();
 }
