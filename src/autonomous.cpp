@@ -159,7 +159,43 @@ void firstQuarterSkills() {
 }
 
 void secondQuarterSkills() {
+    lift.spinTo(30, rotationUnits::deg, 100, velocityUnits::pct, true);
     logMessage("Second Part");
+    spin_hook(100);
+    spin_roller(100);
+    PID_forward(40, 0.5, 0.1, 1);
+    PID_turn(0, 0.75, 0.02);
+    PID_forward(60, 0.5, 0.1, 1);
+    vexDelay(100);
+    spin_hook(0);
+    PID_turn(90, 0.75, 0.02);
+    PID_forward(75, 0.5, 0.1, 1);
+    vexDelay(100);
+    spin_roller(0);
+    PID_turn(220, 0.75, 0.02);
+    PID_forward(-50, 0.5, 0.1, 1);
+    encoderForward(-20, -40);
+    mobileGoalHook.open();
+    vexDelay(500);
+    spin_hook(100);
+    spin_roller(100);
+    PID_turn(145, 0.75, 0.02);
+    PID_forward(90, 0.5, 0.1, 1);
+    PID_turn(90, 0.75, 0.02);
+    vexDelay(250);
+    PID_forward(80, 0.5, 0.1, 0.7);
+    PID_turn(-15, 0.75, 0.02);
+    encoderForward(40, 40);
+    vexDelay(750);
+    PID_turn(225, 0.75, 0.02);
+    spin_hook(0);
+    spin_roller(0);
+    mobileGoalHook.close();
+    move(-50, -50);
+    vexDelay(750);
+    move(0, 0);
+    vexDelay(1000); // not actual
+    PID_forward(60, 0.5, 0.1, 1); // not actual
 }
 
 void autoSkills() {
