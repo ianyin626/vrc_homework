@@ -2,9 +2,9 @@
 #define AUTONOMOUS_H
 
 void auto_route_test();
-void auton15goal();
-void auto15ring();
-void auto15ring2(); // not usable
+void auton15goalblue();
+void auton15ringblue();
+void auton15ringblue2(); // not usable
 void autoSkills();
 
 #endif

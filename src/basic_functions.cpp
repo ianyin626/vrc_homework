@@ -215,12 +215,12 @@ void encoderForward(double target, double speed) {
         move(speed, speed);
         vexDelay(10);
     }
-    logMessage("W(%.0f+%.0f+%.0f)/(%.0f+%.0f+%.0f)", leftFront.position(rotationUnits::deg), 
-    leftMiddle.position(rotationUnits::deg), 
-    leftBack.position(rotationUnits::deg), 
-    rightFront.position(rotationUnits::deg), 
-    rightMiddle.position(rotationUnits::deg), 
-    rightBack.position(rotationUnits::deg));
+    // logMessage("W(%.0f+%.0f+%.0f)/(%.0f+%.0f+%.0f)", leftFront.position(rotationUnits::deg), 
+    // leftMiddle.position(rotationUnits::deg), 
+    // leftBack.position(rotationUnits::deg), 
+    // rightFront.position(rotationUnits::deg), 
+    // rightMiddle.position(rotationUnits::deg), 
+    // rightBack.position(rotationUnits::deg));
     move(0, 0);
 }
 

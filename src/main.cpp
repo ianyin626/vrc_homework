@@ -52,7 +52,7 @@ void autonomous(void) {
         rightFront.resetPosition();
         rightMiddle.resetPosition();
         rightBack.resetPosition();
-        autoSkills();
+        auton15ringblue();
         break;
     
     case 1:

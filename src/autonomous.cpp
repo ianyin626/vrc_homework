@@ -5,7 +5,7 @@
 #include "tasks.h"
 
 
-void auton15goal() {
+void auton15goalblue() {
     PID_forward(-87, 0.5, 0.15, 0.8);
     PID_turn(40, 0.75, 0.02);
     encoderForward(-25, -20);
@@ -30,49 +30,40 @@ void auton15goal() {
     PID_forward(42, 0.5, 0.15, 1);
 }
 
-void auto_route_test() {
-PID_forward(60, 0.5, 0.15, 1);
-}
-
-void auto15ring() {
+void auton15ringblue() {
+    lift.spinTo(45, rotationUnits::deg, 100, velocityUnits::pct, false);
     double startTime = Brain.timer(timeUnits::msec);
     encoderForward(-20, -100);
-    encoderForward(-60, -40);
+    encoderForward(-40, -40);
     grabMobileGoal();
-    encoderForward(-10, -40);
-    PID_forward(7, 0.5, 0.15, 1);
-    intake(100);
-    PID_turn(-135, 0.75, 0.03);
-    PID_forward(50, 0.5, 0.15, 1);
-    vexDelay(100);
-    PID_forward(-2, 0.5, 0.15, 1);
-    PID_turn(-110, 0.75, 0.02);
-    PID_forward(30, 0.5, 0.15, 1);
-    vexDelay(300); 
-    PID_forward(-20, 0.5, 0.15, 1);
-    PID_turn(-15, 0.75, 0.02);
-    PID_forward(40, 0.5, 0.15, 1);
-    vexDelay(200);
-    PID_turn(60, 0.75, 0.02);
-    encoderForward(100, 85);
-    intake(30);
-    PID_forward(17, 0.5, 0.15, 0.9);
-    intake(0);
-    PID_turn(100, 0.75, 0.02);
-    intake(-100);
-    PID_forward(15, 0.5, 0.15, 1);
+    vexDelay(1000);
+    PID_turn(90, 0.75, 0.02);
+    spin_hook(100);
+    spin_roller(100);
+    PID_forward(50, 0.5, 0.1, 1);
+    vexDelay(1000);
+    PID_turn(-2, 0.75, 0.02);
+    PID_forward(30, 0.5, 0.1, 1);
     vexDelay(300);
-    PID_forward(-20, 0.5, 0.15, 1);
-    intake(100);
-    PID_turn(60, 0.75, 0.02);
-    PID_forward(40, 0.6, 0.15, 1);
-    PID_turn(180, 0.75, 0.02);
-    encoderForward(40, 50);
+    PID_forward(-30, 0.5, 0.1, 1);
+    PID_turn(25, 0.75, 0.02);
+    PID_forward(35, 0.5, 0.1, 1);
+    vexDelay(200);
+    PID_forward(-35, 0.5, 0.1, 1);
+    vexDelay(1000);
+    PID_turn(-90, 0.75, 0.02);
+    move(35, 35);
+    vexDelay(2000);
+    spin_hook(0);
+    spin_roller(0);
+    move(15, 15);
+    vexDelay(1000);
     dropMobileGoal();
+    move(0, 0);
     logMessage("time: %.0f", Brain.timer(timeUnits::msec) - startTime);
 }
 
-void auto15ring2() { // not usable
+void auton15goalblue2() { // not usable
     double startTime = Brain.timer(timeUnits::msec);
     encoderForward(-30, -100);
     encoderForward(-70, -40);
@@ -159,6 +150,8 @@ void firstQuarterSkills() {
 }
 
 void secondQuarterSkills() {
+    Inertial.setRotation(90, rotationUnits::deg);
+    Inertial.setHeading(90, rotationUnits::deg);
     lift.spinTo(30, rotationUnits::deg, 100, velocityUnits::pct, true);
     logMessage("Second Part");
     spin_hook(100);
@@ -166,40 +159,31 @@ void secondQuarterSkills() {
     PID_forward(40, 0.5, 0.1, 1);
     PID_turn(0, 0.75, 0.02);
     PID_forward(60, 0.5, 0.1, 1);
-    vexDelay(100);
     spin_hook(0);
-    PID_turn(90, 0.75, 0.02);
-    PID_forward(75, 0.5, 0.1, 1);
-    vexDelay(100);
-    spin_roller(0);
-    PID_turn(220, 0.75, 0.02);
-    PID_forward(-50, 0.5, 0.1, 1);
-    encoderForward(-20, -40);
-    mobileGoalHook.open();
-    vexDelay(500);
-    spin_hook(100);
-    spin_roller(100);
-    PID_turn(145, 0.75, 0.02);
-    PID_forward(90, 0.5, 0.1, 1);
-    PID_turn(90, 0.75, 0.02);
-    vexDelay(250);
-    PID_forward(80, 0.5, 0.1, 0.7);
-    PID_turn(-15, 0.75, 0.02);
-    encoderForward(40, 40);
-    vexDelay(750);
-    PID_turn(225, 0.75, 0.02);
-    spin_hook(0);
-    spin_roller(0);
-    mobileGoalHook.close();
-    move(-50, -50);
-    vexDelay(750);
+    PID_turn(210, 0.75, 0.02);
+    encoderForward(-90, -50);
+    grabMobileGoal();
+    encoderForward(-10, -40);
+    PID_turn(110, 0.75, 0.02);
+    dropMobileGoal();
+    move(-100, -100);
+    vexDelay(1000);
     move(0, 0);
-    vexDelay(1000); // not actual
-    PID_forward(60, 0.5, 0.1, 1); // not actual
+    PID_forward(60, 0.5, 0.1, 1);
+    lift.spinTo(100, rotationUnits::deg, 100, velocityUnits::pct, false);
+    PID_turn(-120, 0.75, 0.02);
+    move(-50, -50);
+    while((Inertial.rotation() - -120) > -10) {
+        double output = Inertial.rotation() - -120;
+        logMessage("output: %.1f", output);
+        move(-50 - output, -60 + output);
+        vexDelay(10);
+    }
+    move(0, 0);
 }
 
 void autoSkills() {
     lift.resetPosition();
-    firstQuarterSkills();
+    // firstQuarterSkills();
     secondQuarterSkills();
 }
