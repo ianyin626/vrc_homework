@@ -29,8 +29,8 @@ void presetThrowRing() {
     intake(100);
 }
 
-void liftTurnToPosition()
-{
+void liftTurnToPosition() {
+    lift.setBrake(brakeType::hold);
     double error = targetLiftPosition - lift.position(rotationUnits::deg);
     double kp = 3;
     while (fabs(error) > 2)
@@ -40,6 +40,7 @@ void liftTurnToPosition()
         logMessage("%.0f", lift.position(rotationUnits::deg));
         vexDelay(10);
     }
+    lift.setBrake(brakeType::brake);
     lift.spin(directionType::fwd, 0, voltageUnits::volt);
 }
 
@@ -52,7 +53,7 @@ void autonomous(void) {
         rightFront.resetPosition();
         rightMiddle.resetPosition();
         rightBack.resetPosition();
-        auto15_goal_blue();
+        autoSkills();
         break;
     
     case 1:
@@ -107,13 +108,12 @@ void usercontrol(void) {
         // Lift control: A - Reset, B - Alliance Stake, X - Wall Stake
         if (getControllerButtonA()) {
             targetLiftPosition = 0;
-            liftTurnToPosition();
+            thread liftAction(liftTurnToPosition);
         } else if (getControllerButtonB()) {
             targetLiftPosition = 100;
-            liftTurnToPosition();
+            thread liftAction(liftTurnToPosition);
         } else if (getControllerButtonX()) {
-            targetLiftPosition = 680;
-            // liftTurnToPosition();
+            targetLiftPosition = 690;
             thread liftAction(liftTurnToPosition);
         }
         

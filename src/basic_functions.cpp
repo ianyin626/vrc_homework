@@ -224,8 +224,17 @@ void encoderForward(double target, double speed) {
     move(0, 0);
 }
 
+void stopDriving() {
+    leftFront.stop(brakeType::brake);
+    leftMiddle.stop(brakeType::brake);
+    leftBack.stop(brakeType::brake);
+    rightFront.stop(brakeType::brake);
+    rightMiddle.stop(brakeType::brake);
+    rightBack.stop(brakeType::brake);
+}
+
 void intake(double volt) {
-    upIntake.spin(directionType::fwd, volt * 100, voltageUnits::mV);
+    upIntake.spin(directionType::fwd, volt * 120, voltageUnits::mV);
     roller.spin(directionType::fwd, volt * 120, voltageUnits::mV);
 }
 
