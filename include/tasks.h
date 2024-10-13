@@ -13,6 +13,8 @@ extern double target;
 extern bool intakeReversing;
 extern bool dropGoal;
 extern double targetLiftPosition;
+extern bool unjam;
+extern bool jammed;
 
 int intake_control();
 int opticalControl();
@@ -26,5 +28,5 @@ int detectRingThrow();
 int detectRingStatusUp();
 int forward_drop_goal();
 int holdLift();
-int holdLiftAnyPos();
+int unjamming();
 #endif

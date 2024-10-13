@@ -97,12 +97,14 @@ void usercontrol(void) {
     // task taskDetectRingLeave(detectRingLeave);
     while (true) {
         // Intake(both) control
-        if (getControllerL1() && !getControllerL2()) {
-            intake(100);
-        } else if (!getControllerL1() && getControllerL2()) {
-            intake(-100);
-        } else {
-            intake(0);
+        if (!jammed) {
+            if (getControllerL1() && !getControllerL2()) {
+                intake(100);
+            } else if (!getControllerL1() && getControllerL2()) {
+                intake(-100);
+            } else {
+                intake(0);
+            }
         }
 
         // Lift control: A - Reset, B - Alliance Stake, X - Wall Stake
@@ -139,6 +141,8 @@ int main() {
     // task taskholdLift(holdLiftAnyPos);
     task taskDetectStatus(detectRobotStatus);
     task taskRouteSelect(autonRouteSelect);
+    // unjam = true;
+    // task taskUnjamming(unjamming);
     // task taskDropgoal(forward_drop_goal); // only used once
     Competition.autonomous(autonomous);
     Competition.drivercontrol(usercontrol);

@@ -17,6 +17,8 @@ bool intakeReversing = false;
 int Cabin[3][2] = {{0, 0}, {0, 0}, {0, 0}};
 bool dropGoal = false;
 double targetLiftPosition = 0;
+bool unjam = false;
+bool jammed = false;
 
 bool get_intake_detected() {
     if (distanceSensor.objectDistance(distanceUnits::mm) < 50) {
@@ -280,12 +282,17 @@ int holdLift() {
     return 0;
 }
 
-// int holdLiftAnyPos() {
-//     leftLift.setPosition(0, rotationUnits::deg);
-//     while(true) {
-//         leftLift.spinTo(targetLiftPos, rotationUnits::deg, 100, velocityUnits::pct, false);
-//         vexDelay(10);
-//         logMessage("%.0f", leftLift.position(rotationUnits::deg));
-//     }
-//     return 0;
-// }
+int unjamming() {
+    while(true) {
+        if(unjam && upIntake.current(currentUnits::amp) > 2 && upIntake.velocity(percentUnits::pct) < 2) {\
+            jammed = true;
+            logMessage("HIHIHIIDKSDJHF");
+            spin_hook(-100);
+            vexDelay(250);
+            spin_hook(100);
+            jammed = false;
+        }
+        vexDelay(10);
+    }
+    return 0;
+}

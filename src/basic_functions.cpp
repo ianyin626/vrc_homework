@@ -72,7 +72,6 @@ double getSign(double input) {
 }
 
 void PID_turn(double target, double error_tolerance, double speed_tolerance) {
-    double timer_start = getTimer();
     long delay = 10;
     double kp = 2.6;
     double ki = 0.07;
@@ -112,15 +111,11 @@ void PID_turn(double target, double error_tolerance, double speed_tolerance) {
         move(total_correction, total_correction * -1);
         past_error = current_error;
         vexDelay(delay);
-        logMessage("%.2f, %.2f, %.2f, %.2f", current_error, integral_correction, derivative_correction, total_correction);
     }
     move(0, 0);
-    double timer_end = getTimer();
-    logMessage("Time(ms): %.2f", timer_end - timer_start);
 }
 
 void PID_forward(double target, double error_tolerance, double speed_tolerance, double speedPercentage) {
-    double startTime = Brain.timer(timeUnits::msec);
     long delay = 10;
     double kp = 4.0;
     double ki = 0.5;
@@ -161,7 +156,6 @@ void PID_forward(double target, double error_tolerance, double speed_tolerance, 
         vexDelay(delay);
         motorRate = getMotorRate();
     }
-    logMessage("PID forward %.3f", Brain.timer(timeUnits::msec) - startTime);
 }
 
 void PID_drift(double target_angle, double base_speed, double max_speed, double error_tolerance, double speed_tolerance) {
