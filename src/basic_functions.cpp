@@ -8,6 +8,15 @@
 int route = 0;
 bool continue_task = true;
 
+void stopDriving() {
+    leftFront.stop(brakeType::brake);
+    leftMiddle.stop(brakeType::brake);
+    leftBack.stop(brakeType::brake);
+    rightFront.stop(brakeType::brake);
+    rightMiddle.stop(brakeType::brake);
+    rightBack.stop(brakeType::brake);
+}
+
 void move(double left_speed, double right_speed) {
     left_speed *= 120;
     right_speed *= 120;
@@ -73,9 +82,9 @@ double getSign(double input) {
 
 void PID_turn(double target, double error_tolerance, double speed_tolerance) {
     long delay = 10;
-    double kp = 2.6;
+    double kp = 2;
     double ki = 0.07;
-    double kd = 18;
+    double kd = 14;
     double porportional_correction = 0;
     double integral_correction = 0;
     double derivative_correction = 0;
@@ -108,18 +117,19 @@ void PID_turn(double target, double error_tolerance, double speed_tolerance) {
             total_correction = getSign(total_correction) * MIN_DRIVE_SPEED;
         }
         
+        logMessage("%.2f %.2f %.0f", current_error, getGyroRate(), total_correction);
         move(total_correction, total_correction * -1);
         past_error = current_error;
         vexDelay(delay);
     }
-    move(0, 0);
+    stopDriving();
 }
 
 void PID_forward(double target, double error_tolerance, double speed_tolerance, double speedPercentage) {
     long delay = 10;
-    double kp = 4.0;
-    double ki = 0.5;
-    double kd = 30;
+    double kp = 3.5;
+    double ki = 0.3;
+    double kd = 20.5;
     double porportional_correction = 0;
     double integral_correction = 0;
     double derivative_correction = 0;
@@ -130,7 +140,7 @@ void PID_forward(double target, double error_tolerance, double speed_tolerance, 
     double past_error = current_error;
     double error_sum = 0;
     double total_correction = 0;
-    double integral_range = 3;
+    double integral_range = 5;
     double motorRate = getMotorRate();
 
     while (fabs(current_error) > error_tolerance || fabs(motorRate) > speed_tolerance) {
@@ -152,10 +162,11 @@ void PID_forward(double target, double error_tolerance, double speed_tolerance, 
 
         move(total_correction * speedPercentage, total_correction * speedPercentage);
         past_error = current_error;
-        // logMessage("%.2f %.2f %.0f", current_error, getMotorRate(), total_correction);
+        logMessage("%.2f %.2f %.0f", current_error, getMotorRate(), total_correction);
         vexDelay(delay);
         motorRate = getMotorRate();
     }
+    move(0, 0);
 }
 
 void PID_drift(double target_angle, double base_speed, double max_speed, double error_tolerance, double speed_tolerance) {
@@ -216,15 +227,6 @@ void encoderForward(double target, double speed) {
     // rightMiddle.position(rotationUnits::deg), 
     // rightBack.position(rotationUnits::deg));
     move(0, 0);
-}
-
-void stopDriving() {
-    leftFront.stop(brakeType::brake);
-    leftMiddle.stop(brakeType::brake);
-    leftBack.stop(brakeType::brake);
-    rightFront.stop(brakeType::brake);
-    rightMiddle.stop(brakeType::brake);
-    rightBack.stop(brakeType::brake);
 }
 
 void intake(double volt) {

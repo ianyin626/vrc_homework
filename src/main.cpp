@@ -106,7 +106,46 @@ void usercontrol(void) {
                 intake(0);
             }
         }
-
+        if (getControllerButtonDown()) {
+            route = (route+1)%5;
+        }
+        if (getControllerButtonUp()) {
+            leftFront.resetPosition();
+            leftMiddle.resetPosition();
+            leftBack.resetPosition();
+            rightFront.resetPosition();
+            rightMiddle.resetPosition();
+            rightBack.resetPosition();
+            switch (route) {
+                case 0:
+                    auto15_goal_blue();
+                    break;
+                
+                case 1:
+                    auto15_goal_red();
+                    break;
+                
+                case 2:
+                    auton15ringblue();
+                    break;
+                case 3:
+                    auton15ringred();
+                    break;
+                
+                case 4:
+                    autoSkills();
+                    break;
+                
+                case 5:
+                    break;
+                
+                case 6:
+                    break;
+                
+                case 7:
+                    break;
+            }
+        }
         // Lift control: A - Reset, B - Alliance Stake, X - Wall Stake
         if (getControllerButtonA()) {
             targetLiftPosition = 0;

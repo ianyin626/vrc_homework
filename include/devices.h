@@ -31,7 +31,7 @@ extern pneumatics Arm;
 #define INITIAL_HEADING 0
 #define RING_COLOR_RED 1
 #define RING_COLOR_BLUE 2
-#define MIN_DRIVE_SPEED 20
+#define MIN_DRIVE_SPEED 10
 
 inline double getInertial() {
     return Inertial.rotation(rotationUnits::deg);
@@ -87,6 +87,10 @@ inline double getIntakeForward() {
 
 inline double getControllerButtonUp() {
     return Controller.ButtonUp.PRESSED;
+}
+
+inline double getControllerButtonDown() {
+    return Controller.ButtonDown.PRESSED;
 }
 
 inline double getControllerButtonA() {

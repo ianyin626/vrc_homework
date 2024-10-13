@@ -8,12 +8,12 @@
 void auto15_goal_blue() {
     lift.spinTo(30, rotationUnits::deg, 100, velocityUnits::pct, false);
     double startTime = Brain.timer(timeUnits::msec);
-    PID_forward(-28, 0.5, 0.1, 1);
-    PID_turn(30, 0.75, 0.02);
-    encoderForward(-35, -30);
-    vexDelay(750);
+    PID_forward(-35, 0.5, 0.1, 1);
+    PID_turn(35, 0.75, 0.02);
+    encoderForward(-25, -50);
+    encoderForward(-20, -30);
     grabMobileGoal();
-    vexDelay(250);
+    vexDelay(500);
     PID_turn(90, 0.75, 0.02);
     spin_hook(100);
     spin_roller(100);
@@ -22,11 +22,11 @@ void auto15_goal_blue() {
     vexDelay(1000);
     PID_turn(-90, 0.75, 0.02);
     move(50, 50);
-    vexDelay(1500);
-    move(10, 10);
-    vexDelay(500);
-    move(0, 0);
+    vexDelay(300);
     dropMobileGoal();
+    move(30, 30);
+    vexDelay(1500);
+    move(0, 0);
     intake(0);
     logMessage("time: %.0f", Brain.timer(timeUnits::msec) - startTime);
 }
@@ -34,12 +34,12 @@ void auto15_goal_blue() {
 void auto15_goal_red() {
 lift.spinTo(30, rotationUnits::deg, 100, velocityUnits::pct, false);
     double startTime = Brain.timer(timeUnits::msec);
-    PID_forward(-28, 0.5, 0.1, 1);
-    PID_turn(-30, 0.75, 0.02);
-    encoderForward(-35, -30);
-    vexDelay(750);
+    PID_forward(-35, 0.5, 0.1, 1);
+    PID_turn(-35, 0.75, 0.02);
+    encoderForward(-25, -50);
+    encoderForward(-20, -30);
     grabMobileGoal();
-    vexDelay(250);
+    vexDelay(500);
     PID_turn(-90, 0.75, 0.02);
     spin_hook(100);
     spin_roller(100);
@@ -48,78 +48,87 @@ lift.spinTo(30, rotationUnits::deg, 100, velocityUnits::pct, false);
     vexDelay(1000);
     PID_turn(90, 0.75, 0.02);
     move(50, 50);
-    vexDelay(1500);
-    move(10, 10);
-    vexDelay(500);
-    move(0, 0);
+    vexDelay(300);
     dropMobileGoal();
+    move(30, 30);
+    vexDelay(1500);
+    move(0, 0);
     intake(0);
     logMessage("time: %.0f", Brain.timer(timeUnits::msec) - startTime);
 }
 
 void auton15ringred() {
+    Inertial.setRotation(-180, rotationUnits::deg);
+    Inertial.setHeading(-180, rotationUnits::deg);
+    PID_turn(-150, 0.75, 0.02);
     lift.spinTo(45, rotationUnits::deg, 100, velocityUnits::pct, false);
     double startTime = Brain.timer(timeUnits::msec);
-    encoderForward(-20, -100);
-    encoderForward(-35, -40);
-    vexDelay(500);
+    encoderForward(-30, -100);
+    encoderForward(-55, -40);
     grabMobileGoal();
     vexDelay(1000);
     PID_turn(-90, 0.75, 0.02);
     spin_hook(100);
     spin_roller(100);
-    PID_forward(50, 0.5, 0.1, 1);
+    PID_forward(55, 0.5, 0.1, 1);
     vexDelay(1000);
-    PID_turn(2, 0.75, 0.02);
+    PID_turn(3, 0.75, 0.02);
     PID_forward(30, 0.5, 0.1, 1);
     vexDelay(300);
     PID_forward(-30, 0.5, 0.1, 1);
-    PID_turn(-25, 0.75, 0.02);
+    PID_turn(-24, 0.75, 0.02);
     PID_forward(35, 0.5, 0.1, 1);
     vexDelay(200);
     PID_forward(-35, 0.5, 0.1, 1);
     vexDelay(1000);
     PID_turn(90, 0.75, 0.02);
     move(35, 35);
-    vexDelay(2000);
-    spin_hook(0);
+    vexDelay(500);
+    dropMobileGoal();
     spin_roller(0);
+    lift.spinTo(0, rotationUnits::deg, -100, velocityUnits::pct, false);
+    spin_hook(0);
+    vexDelay(1500);
     move(15, 15);
     vexDelay(1000);
-    dropMobileGoal();
     move(0, 0);
     logMessage("time: %.0f", Brain.timer(timeUnits::msec) - startTime);
 }
 
 void auton15ringblue() {
+    Inertial.setRotation(180, rotationUnits::deg);
+    Inertial.setHeading(180, rotationUnits::deg);
+    PID_turn(150, 0.75, 0.02);
     lift.spinTo(45, rotationUnits::deg, 100, velocityUnits::pct, false);
     double startTime = Brain.timer(timeUnits::msec);
-    encoderForward(-20, -100);
-    encoderForward(-40, -40);
+    encoderForward(-30, -100);
+    encoderForward(-55, -40);
     grabMobileGoal();
-    vexDelay(1000);
+    vexDelay(500);
     PID_turn(90, 0.75, 0.02);
     spin_hook(100);
     spin_roller(100);
-    PID_forward(50, 0.5, 0.1, 1);
+    PID_forward(55, 0.5, 0.1, 1);
     vexDelay(1000);
-    PID_turn(-2, 0.75, 0.02);
+    PID_turn(-3, 0.75, 0.02);
     PID_forward(30, 0.5, 0.1, 1);
     vexDelay(300);
     PID_forward(-30, 0.5, 0.1, 1);
-    PID_turn(25, 0.75, 0.02);
+    PID_turn(27, 0.75, 0.02);
     PID_forward(35, 0.5, 0.1, 1);
     vexDelay(200);
     PID_forward(-35, 0.5, 0.1, 1);
     vexDelay(1000);
     PID_turn(-90, 0.75, 0.02);
     move(35, 35);
-    vexDelay(2000);
-    spin_hook(0);
+    vexDelay(500);
+    dropMobileGoal();
     spin_roller(0);
+    lift.spinTo(0, rotationUnits::deg, -100, velocityUnits::pct, false);
+    spin_hook(0);
+    vexDelay(1500);
     move(15, 15);
     vexDelay(1000);
-    dropMobileGoal();
     move(0, 0);
     logMessage("time: %.0f", Brain.timer(timeUnits::msec) - startTime);
 }
@@ -185,6 +194,7 @@ void secondQuarterSkills() {
     PID_turn(215, 0.75, 0.02);
     encoderForward(-90, -40);
     grabMobileGoal();
+
     vexDelay(500);
     PID_turn(120, 0.75, 0.02);
     dropMobileGoal();
@@ -310,10 +320,15 @@ void fourthQuarterSkills() {
     move(0, 0);
 }
 
+void autoTest() {
+    PID_turn(90, 0.75, 0.02);
+}
+
 void autoSkills() {
     // unjam = false;
     // task tsakUnjamming(unjamming);
     double startTime = Brain.timer(timeUnits::msec);
+    // autoTest();
     lift.resetPosition();
     firstQuarterSkills();
     secondQuarterSkills();

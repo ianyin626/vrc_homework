@@ -239,7 +239,7 @@ int detectRobotStatus() {
         Brain.Screen.printAt(0, 140, "liftTemp: %.0f", lift.temperature(temperatureUnits::celsius));
 
         Controller.Screen.setCursor(4, 1);
-        Controller.Screen.print("Rotation: %5.0f, Expected: %s", Inertial.rotation(rotationUnits::deg), expectedRingColor == RING_COLOR_BLUE ? "Blue": "Red");
+        Controller.Screen.print("Deg:%.0f,%s,Route %d", Inertial.rotation(rotationUnits::deg), expectedRingColor == RING_COLOR_BLUE ? "Blue": "Red", route);
         vexDelay(500);
     }
     return 0;
